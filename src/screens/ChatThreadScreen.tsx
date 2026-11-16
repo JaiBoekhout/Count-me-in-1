@@ -1,3 +1,6 @@
+import { PickActivityPanel } from "../components/PickActivityPanel"
+import { activityShareMessage } from "../lib/activityLinks"
+import { CalendarPlus } from "lucide-react"
 import { ReportDialog } from "../components/ReportDialog"
 import { blockProfile } from "../lib/moderation"
 import { useViewerProfile } from "../lib/viewerProfile"
@@ -38,6 +41,7 @@ export function ChatThreadScreen({ embedded = false }: { embedded?: boolean }) {
   // Chat menu (top right) and the warning pop-ups it opens.
   const [menuOpen, setMenuOpen] = useState(false)
   const [membersOpen, setMembersOpen] = useState(false)
+  const [pickerOpen, setPickerOpen] = useState(false)
   // Report or block a member from the chat (Members list).
   const [reportTarget, setReportTarget] = useState<{ id: string; name: string } | null>(null)
   const viewer = useViewerProfile()
@@ -145,6 +149,27 @@ export function ChatThreadScreen({ embedded = false }: { embedded?: boolean }) {
       void supabase?.removeChannel(channel)
     }
   }, [thread, isDemo])
+
+  async function shareActivity(activityId: string) {
+    if (!thread) return
+    setPickerOpen(false)
+    setIsSending(true)
+    setError("")
+    try {
+      const text = activityShareMessage(activityId)
+      if (isDemo) {
+        setMessages((current) => [...current, sendChatMessage(thread.id, text)])
+      } else {
+        await sendSavedChatMessage(thread.id, text)
+        setMessages(await getSavedChatMessages(thread.id))
+        await markSavedChatRead(thread.id)
+      }
+    } catch (sendError) {
+      setError(sendError instanceof Error ? sendError.message : "Unable to share this activity.")
+    } finally {
+      setIsSending(false)
+    }
+  }
 
   async function handleSend(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -302,7 +327,12 @@ export function ChatThreadScreen({ embedded = false }: { embedded?: boolean }) {
           )}
         </p>
       ) : (
+            <>
+        {pickerOpen && <PickActivityPanel onPick={(id) => void shareActivity(id)} onClose={() => setPickerOpen(false)} />}
             <form className="message-input" onSubmit={(event) => void handleSend(event)}>
+        <button type="button" className="message-attach" aria-label="Share an activity" onClick={() => setPickerOpen(true)} disabled={isSending}>
+          <CalendarPlus aria-hidden="true" />
+        </button>
         <input
           value={draft}
           onChange={(event) => setDraft(event.target.value)}
@@ -315,6 +345,7 @@ export function ChatThreadScreen({ embedded = false }: { embedded?: boolean }) {
           <Send aria-hidden="true" />
         </button>
       </form>
+        </>
       )}
 
       {membersOpen && (

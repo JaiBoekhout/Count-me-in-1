@@ -1,3 +1,6 @@
+import { PickActivityPanel } from "../components/PickActivityPanel"
+import { activityShareMessage } from "../lib/activityLinks"
+import { CalendarPlus } from "lucide-react"
 import { ReportDialog } from "../components/ReportDialog"
 import { blockProfile } from "../lib/moderation"
 import { ArrowLeft, MoreVertical, Send } from "lucide-react"
@@ -34,6 +37,7 @@ export function DirectChatScreen({ embedded = false }: { embedded?: boolean }) {
   const messageListRef = useRef<HTMLDivElement | null>(null)
   const [menuOpen, setMenuOpen] = useState(false)
   const [reportOpen, setReportOpen] = useState(false)
+  const [pickerOpen, setPickerOpen] = useState(false)
   const [confirmDelete, setConfirmDelete] = useState(false)
   // After "Delete chat", only messages sent later are shown to you.
   const [hiddenAt, setHiddenAt] = useState(0)
@@ -109,6 +113,22 @@ export function DirectChatScreen({ embedded = false }: { embedded?: boolean }) {
       void supabase?.removeChannel(channel)
     }
   }, [chat])
+
+  async function shareActivity(activityId: string) {
+    if (!chat) return
+    setPickerOpen(false)
+    setIsSending(true)
+    setError("")
+    try {
+      await sendDirectMessage(chat.id, activityShareMessage(activityId))
+      setMessages(await getDirectMessages(chat.id, chat.friendName, chat.friendPhotoUrl))
+      await markDirectChatRead(chat.id)
+    } catch (sendError) {
+      setError(sendError instanceof Error ? sendError.message : "Unable to share this activity.")
+    } finally {
+      setIsSending(false)
+    }
+  }
 
   async function handleSend(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -216,7 +236,12 @@ export function DirectChatScreen({ embedded = false }: { embedded?: boolean }) {
       </div>
 
       {canSend ? (
+        <>
+        {pickerOpen && <PickActivityPanel onPick={(id) => void shareActivity(id)} onClose={() => setPickerOpen(false)} />}
         <form className="message-input" onSubmit={(event) => void handleSend(event)}>
+          <button type="button" className="message-attach" aria-label="Share an activity" onClick={() => setPickerOpen(true)} disabled={isSending}>
+            <CalendarPlus aria-hidden="true" />
+          </button>
           <input
             value={draft}
             onChange={(event) => setDraft(event.target.value)}
@@ -229,6 +254,7 @@ export function DirectChatScreen({ embedded = false }: { embedded?: boolean }) {
             <Send aria-hidden="true" />
           </button>
         </form>
+        </>
       ) : (
         <p className="direct-chat-readonly" role="note">
           You can only message friends. Add {chat.friendName} as a friend again to keep chatting.
