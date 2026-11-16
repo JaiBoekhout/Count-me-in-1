@@ -1,4 +1,5 @@
 import { SuburbInput } from '../components/SuburbInput'
+import { claimStoredReferral } from '../lib/referrals'
 import { markOnboardingComplete, takeReturnPath } from '../lib/authGate'
 import { Bell, CalendarDays, Camera, Check, LocateFixed, QrCode, ShieldCheck, Trophy } from 'lucide-react'
 import { useEffect, useMemo, useRef, useState, type ChangeEvent } from 'react'
@@ -17,12 +18,11 @@ import {
 } from '../lib/profile'
 import { getSupabaseSetupHint, supabase } from '../lib/supabase'
 import { refreshViewerProfile } from '../lib/viewerProfile'
-import { sportNames } from '../data/sports'
+import { useSportCatalog } from '../lib/useSportCatalog'
 import { defaultRadiusKm, getDeviceLocation, nearestSuburb, roundCoordinates, setLocationPreference } from '../lib/distance'
 import { enablePush, getPushState } from '../lib/push'
 import { loadLocalities } from '../lib/localities'
 
-const sportOptions: string[] = sportNames
 const availabilityOptions = ['Weekday mornings', 'Weekday evenings', 'Saturdays', 'Sundays', 'Flexible']
 const skillOptions: SkillLevel[] = ['Beginner', 'Intermediate', 'Experienced']
 
@@ -89,6 +89,7 @@ function fileToDataUrl(file: File) {
 export function OnboardingScreen() {
   const navigate = useNavigate()
   const photoInputRef = useRef<HTMLInputElement | null>(null)
+  const sportOptions = useSportCatalog()
   const [stepIndex, setStepIndex] = useState(0)
   const [firstName, setFirstName] = useState('')
   const [bio, setBio] = useState('')
@@ -312,6 +313,7 @@ export function OnboardingScreen() {
       })
       setProfileSaved(true)
       clearDraft(userData.user.id)
+      void claimStoredReferral()
       if (skipRest) finish()
       else goTo(steps.indexOf('notifications'))
     } catch (saveError) {

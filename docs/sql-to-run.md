@@ -33,6 +33,8 @@ Alle bestanden zijn veilig om opnieuw te draaien. Weet je niet zeker of je er ee
 | 25 | `supabase/migrations/20261113210000_chat_management.sql` | Chats beheren: host haalt leden uit de activiteit, sluit of verwijdert de groepschat; iedereen kan chats uit zijn lijst halen |
 | 26 | `supabase/migrations/20261114100000_activity_update_notifications.sql` | Wie meedoet krijgt een melding als de host (of een admin) de activiteit wijzigt, met wat er veranderd is |
 | 27 | `supabase/migrations/20261114120000_seen_patches.sql` | Onthoudt per account welke "New patch unlocked"-schermen je al gezien hebt, zodat elk maar één keer verschijnt (op al je toestellen) |
+| 28 | `supabase/migrations/20261114140000_premium_and_partners.sql` | Premium-schakelaar (nu alleen admin/moderator) en partnerbanners voor sponsors (Concept/Live) |
+| 29 | `supabase/migrations/20261116100000_checkin_window_and_reminders.sql` | Check-in kan tot 24 uur na de start; herinnering 1 uur voor de start (draait elke 5 minuten) |
 
 ## Zo doe je het (per bestand)
 
@@ -65,3 +67,5 @@ Alle bestanden zijn veilig om opnieuw te draaien. Weet je niet zeker of je er ee
 - **Na 23:** open als admin het profiel van een lid, kies in het menu **Warning or message (admin)** en stuur een bericht. Bij het lid staat het bovenaan **Chats**.
 - **Na 26:** wijzig als host de tijd van een activiteit waar iemand aan meedoet. Die persoon krijgt in **Notifications** "Activity updated" met de nieuwe tijd.
 - **Na 27:** open de app twee keer na elkaar. Een patch-feestscherm dat je al gezien hebt, komt niet terug.
+- **Na 28:** nog niets te zien; de partner-slider volgt.
+- **Na 29:** je krijgt onderaan **Success**. Geeft hij een fout over `pg_cron`? Ga dan naar **Database** > **Extensions**, zoek **pg_cron**, zet hem aan en draai 29 opnieuw.

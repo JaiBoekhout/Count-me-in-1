@@ -37,6 +37,14 @@ export const sportVerbs: Record<string, string> = Object.fromEntries(sports.map(
 // "Open activity" is not a sport you pick for your profile, but it is a choice in Create activity.
 export const openActivity = { name: 'Open activity', icon: 'plus' } as const
 
+// Icons of sports an admin added in the app (the "icon" column in Supabase).
+const customSportIcons = new Map<string, string>()
+export function registerSportIcons(entries: Array<{ name: string; icon: string | null }>) {
+  for (const entry of entries) if (entry.icon) customSportIcons.set(entry.name, entry.icon)
+}
+
 export function getSportIconKey(name: string) {
-  return sports.find((sport) => sport.name === name)?.icon ?? (name === openActivity.name ? openActivity.icon : 'plus')
+  return sports.find((sport) => sport.name === name)?.icon
+    ?? customSportIcons.get(name)
+    ?? (name === openActivity.name ? openActivity.icon : 'plus')
 }

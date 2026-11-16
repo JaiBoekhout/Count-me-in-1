@@ -1,3 +1,4 @@
+import { SupporterBadge } from "../components/SupporterBadge"
 import {
   ArrowLeft,
   ChevronRight,
@@ -601,6 +602,7 @@ export function ProfileScreen() {
         <h1>
           {profile.name}, {profile.age}
         </h1>
+        <SupporterBadge profileId={profileId} isOwnProfile={isCurrentUser} />
         <p>
           <MapPin />
           {profile.suburb}

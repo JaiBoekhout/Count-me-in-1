@@ -35,7 +35,12 @@ export function AllActivitiesScreen() {
   const [isLoading, setIsLoading] = useState(cachedFeed === null)
   const [loadError, setLoadError] = useState('')
   const [query, setQuery] = useState('')
-  const [filters, setFilters] = useState<ActivityFilters>(defaultActivityFilters)
+  // Opened from Explore sports: start with that sport selected.
+  const [filters, setFilters] = useState<ActivityFilters>(() =>
+    typeof location.state?.sport === 'string'
+      ? { ...defaultActivityFilters, sports: [location.state.sport] }
+      : defaultActivityFilters,
+  )
   const [searchLocation, setSearchLocation] = useState<LocationPreference | null>(() => getLocationPreference())
   const [filtersOpen, setFiltersOpen] = useState(false)
   const [now] = useState(() => new Date())
