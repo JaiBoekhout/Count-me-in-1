@@ -35,6 +35,7 @@ Alle bestanden zijn veilig om opnieuw te draaien. Weet je niet zeker of je er ee
 | 27 | `supabase/migrations/20261114120000_seen_patches.sql` | Onthoudt per account welke "New patch unlocked"-schermen je al gezien hebt, zodat elk maar één keer verschijnt (op al je toestellen) |
 | 28 | `supabase/migrations/20261114140000_premium_and_partners.sql` | Premium-schakelaar (nu alleen admin/moderator) en partnerbanners voor sponsors (Concept/Live) |
 | 29 | `supabase/migrations/20261116100000_checkin_window_and_reminders.sql` | Check-in kan tot 24 uur na de start; herinnering 1 uur voor de start (draait elke 5 minuten) |
+| 30 | `supabase/migrations/20261116120000_admin_manage_sports.sql` | Admin kan in de app het icoon van een sport wijzigen en een ongebruikte sport verwijderen (toevoegen kan al) |
 
 ## Zo doe je het (per bestand)
 
@@ -69,3 +70,4 @@ Alle bestanden zijn veilig om opnieuw te draaien. Weet je niet zeker of je er ee
 - **Na 27:** open de app twee keer na elkaar. Een patch-feestscherm dat je al gezien hebt, komt niet terug.
 - **Na 28:** nog niets te zien; de partner-slider volgt.
 - **Na 29:** je krijgt onderaan **Success**. Geeft hij een fout over `pg_cron`? Ga dan naar **Database** > **Extensions**, zoek **pg_cron**, zet hem aan en draai 29 opnieuw.
+- **Na 30:** ga als admin naar **More** > **Moderation** > **Sports**, voeg **Fishing** toe en wijzig daarna het icoon. Je krijgt geen foutmelding.
