@@ -653,7 +653,13 @@ export function ActivityDetailScreen() {
           // Duration is shown once below, from the activity itself.
           .filter(([key, value]) => value.trim() !== "" && !/^duration/i.test(key))
           .map(([key, value]) => ({
-            label: key === "kite_sizes" ? "Kites" : key.replace(/_/g, " "),
+            label: key === "kite_sizes"
+              ? "Kites"
+              : key === "gym_setup"
+                ? "Gym set-up"
+                : key === "distance_km"
+                  ? "Distance (km)"
+                  : key.replace(/_/g, " ").replace(/^./, (letter) => letter.toUpperCase()),
             value,
           })),
         {

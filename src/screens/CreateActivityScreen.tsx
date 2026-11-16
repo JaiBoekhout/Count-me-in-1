@@ -99,8 +99,10 @@ const presetFields: Record<SportName | typeof openActivity.name, PresetField[]> 
     { key: 'pace', label: 'Pace', options: ['Relaxed', 'Steady', 'Training'] },
   ],
   Gym: [
-    { key: 'gym_name', label: 'Gym name', placeholder: 'For example, your local gym' },
-    { key: 'focus', label: 'Focus', options: ['Strength', 'Hypertrophy', 'Cardio', 'Functional'] },
+    { key: 'gym_name', label: 'Gym name', placeholder: 'For example, Revo Fitness Marion' },
+    { key: 'training', label: 'What are you training?', options: ['Legs', 'Chest', 'Back', 'Shoulders', 'Arms', 'Core', 'Full body', 'Cardio', 'Hyrox / functional'] },
+    { key: 'focus', label: 'Style', options: ['Strength', 'Hypertrophy', 'Cardio', 'Functional'] },
+    { key: 'gym_setup', label: 'Using the gym\'s', options: ['Free weights', 'Machines', 'Functional / Hyrox area', 'Obstacle / parkour course', 'Pool'] },
     { key: 'duration_minutes', label: 'Duration (minutes)', type: 'number', min: 15, max: 1440, step: 15 },
   ],
   'Mountain biking': [
