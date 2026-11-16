@@ -50,6 +50,7 @@ export const menuGroups: MenuGroup[] = [
       { label: 'Explore sports', href: '/more/explore-sports', icon: Telescope },
       { label: 'Find new crew', href: '/more/crew', icon: Search },
       { label: 'Friend requests', href: '/more/requests', icon: UserPlus },
+      { label: 'Crews', href: '/more/crews', icon: UsersRound },
     ],
   },
   {

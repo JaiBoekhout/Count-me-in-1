@@ -1,3 +1,5 @@
+import { getPostableCrews, type Crew } from '../lib/crews'
+import { usePremium } from '../lib/premium'
 import { activityLevels } from '../lib/activityFilters'
 import { FormSkeleton } from '../components/Skeleton'
 import { ensureSportsInDatabase } from '../lib/sportCatalog'
@@ -175,6 +177,14 @@ export function CreateActivityScreen() {
   const [searchParams] = useSearchParams()
   const coverInputRef = useRef<HTMLInputElement | null>(null)
   const preselectedSport = searchParams.get('sport')
+  // Pro: post for one crew only.
+  const premium = usePremium()
+  const [crews, setCrews] = useState<Crew[]>([])
+  const [crewId, setCrewId] = useState<string | null>(null)
+  useEffect(() => {
+    if (!premium) return
+    void getPostableCrews().then(setCrews)
+  }, [premium])
   const [step, setStep] = useState(1)
   const [furthestStep, setFurthestStep] = useState(1)
   const [sports, setSports] = useState<SportOption[]>([])
@@ -495,6 +505,9 @@ export function CreateActivityScreen() {
             }
           : sportDetails,
         cover_image_url: coverImageUrl,
+        // Pro: only this crew sees the activity. Left out entirely for everyone,
+        // so posting still works before the crews update is run.
+        ...(crewId ? { crew_id: crewId } : {}),
       }
       const pin = parseMapPin(coordinates)
       let { data: createdActivity, error: createError } = await client
@@ -897,6 +910,21 @@ export function CreateActivityScreen() {
             <h2 id="invite-step-title">Bring someone along</h2>
             <p>Invite a mate if you like. You can skip this step.</p>
           </div>
+          {crews.length > 0 && (
+            <div className="crew-visibility">
+              <span className="sport-admin-label">Who can see this activity?</span>
+              <div className="choice-chips">
+                <button type="button" className={`choice-chip ${crewId === null ? 'selected' : ''}`} aria-pressed={crewId === null} onClick={() => setCrewId(null)}>
+                  Everyone
+                </button>
+                {crews.map((crew) => (
+                  <button type="button" key={crew.id} className={`choice-chip ${crewId === crew.id ? 'selected' : ''}`} aria-pressed={crewId === crew.id} onClick={() => setCrewId(crew.id)}>
+                    Only {crew.name}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
           <div className="invite-panel">
             <div className="invite-header">
               <span>Your friends</span>

@@ -1,3 +1,4 @@
+import { CrewsScreen } from "./screens/CrewsScreen"
 import { ProMembersScreen } from "./screens/ProMembersScreen"
 import { LegalScreen } from "./screens/LegalScreen"
 import { StoriesScreen } from "./screens/StoriesScreen"
@@ -297,6 +298,7 @@ const router = createBrowserRouter([
       { path: "/more/alerts", element: <SmartAlertsScreen /> },
       { path: "/profile/style", element: <ProfileStyleScreen /> },
       { path: "/stories", element: <StoriesScreen /> },
+      { path: "/more/crews", element: <CrewsScreen /> },
       { path: "/more/moderation/members/:id/edit", element: <AdminEditProfileScreen /> },
       { path: "/more/moderation/members/:id/message", element: <SendStaffMessageScreen /> },
     ],
