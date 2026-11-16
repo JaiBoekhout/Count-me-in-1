@@ -6137,3 +6137,21 @@ textarea:focus::placeholder { color: transparent; }
 .story-actions button { display: inline-flex; align-items: center; gap: 4px; border: 0; background: transparent; color: var(--seafoam); font-size: 14px; padding: 4px 0; }
 .story-actions svg { width: 14px; height: 14px; }
 .story-hidden-note { color: var(--danger); font-size: 13px; }
+
+/* Dropdowns: keep the arrow away from the rounded edge. */
+/* :not(#none) makes this win over the background shorthand on each select. */
+select:not(#none) {
+  appearance: none;
+  -webkit-appearance: none;
+  padding-right: 44px;
+  /* Chevron drawn with two gradients, in the app's own colour. */
+  background-image:
+    linear-gradient(45deg, transparent 40%, var(--text-secondary) 40%, var(--text-secondary) 60%, transparent 60%),
+    linear-gradient(-45deg, transparent 40%, var(--text-secondary) 40%, var(--text-secondary) 60%, transparent 60%);
+  background-position:
+    calc(100% - 25px) 50%,
+    calc(100% - 18px) 50%;
+  background-size: 8px 8px, 8px 8px;
+  background-repeat: no-repeat;
+}
+select:focus { outline-color: var(--seafoam); }
