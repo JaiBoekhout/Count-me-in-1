@@ -10,7 +10,8 @@ import {
 import { getStoredLanguage } from "../lib/i18n"
 import { Skeleton } from "../components/Skeleton"
 import { getViewerProfileState } from "../lib/viewerProfile"
-import { getModerationGroup, logOut, menuGroups, type MenuItem } from "../lib/moreMenu"
+import { getModerationGroup, logOut, menuGroups, proGroup, type MenuItem } from "../lib/moreMenu"
+import { usePremium } from "../lib/premium"
 import { closeMoreMenuEvent, getMoreOrigin, moreMenuSlideMs } from "../lib/moreNavigation"
 import { getCurrentModerationRole } from "../lib/moderation"
 import { supabase } from "../lib/supabase"
@@ -54,6 +55,7 @@ export function MoreScreen() {
   const [checkinVersion, setCheckinVersion] = useState(0)
   const [language, setLanguage] = useState(getStoredLanguage())
   const [isStaff, setIsStaff] = useState(false)
+  const premium = usePremium()
   const [isAdmin, setIsAdmin] = useState(false)
   const [statusMessage, setStatusMessage] = useState(
     typeof location.state?.statusMessage === "string"
@@ -312,7 +314,7 @@ export function MoreScreen() {
         </p>
       )}
 
-      {(isStaff ? [...menuGroups, getModerationGroup(isAdmin)] : menuGroups).map((group) => (
+      {[...menuGroups, ...(premium ? [proGroup] : []), ...(isStaff ? [getModerationGroup(isAdmin)] : [])].map((group) => (
         <section
           className="more-menu-group"
           key={group.title}

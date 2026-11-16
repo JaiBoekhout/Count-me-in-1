@@ -35,6 +35,10 @@ Alle bestanden zijn veilig om opnieuw te draaien. Weet je niet zeker of je er ee
 | 27 | `supabase/migrations/20261114120000_seen_patches.sql` | Onthoudt per account welke "New patch unlocked"-schermen je al gezien hebt, zodat elk maar één keer verschijnt (op al je toestellen) |
 | 28 | `supabase/migrations/20261114140000_premium_and_partners.sql` | Premium-schakelaar (nu alleen admin/moderator) en partnerbanners voor sponsors (Concept/Live) |
 | 29 | `supabase/migrations/20261116100000_checkin_window_and_reminders.sql` | Check-in kan tot 24 uur na de start; herinnering 1 uur voor de start (draait elke 5 minuten) |
+| 30 | `supabase/migrations/20261116120000_admin_manage_sports.sql` | Admin kan in de app het icoon van een sport wijzigen en een ongebruikte sport verwijderen (toevoegen kan al) |
+| 31 | `supabase/migrations/20261116140000_referral_challenge.sql` | Uitnodig-challenge: 4 vrienden aangemeld via jouw link = 1 jaar gratis Pro |
+| 32 | `supabase/migrations/20261116150000_supporter_badge.sql` | Supporter-badge op profielen van leden met Pro |
+| 33 | `supabase/migrations/20261116160000_smart_alerts.sql` | Pro: slimme meldingen bij een nieuwe activiteit die bij je past (sport, afstand, weekend) |
 
 ## Zo doe je het (per bestand)
 

@@ -64,6 +64,7 @@ const titles = {
   activity_cancelled: 'Activity cancelled',
   activity_updated: 'Activity updated',
   activity_reminder: 'Starting in 1 hour',
+  activity_alert: 'New activity for you',
   pr_confirmed: 'PR confirmed',
   pr_flagged: 'PR flagged',
   pr_verified: 'PR verified',
