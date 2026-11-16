@@ -1,3 +1,4 @@
+import { PartnersAdminScreen } from "./screens/PartnersAdminScreen"
 import { SportsAdminScreen } from "./screens/SportsAdminScreen"
 import { ExploreSportsScreen } from "./screens/ExploreSportsScreen"
 import { PatchCelebration } from "./components/PatchCelebration"
@@ -280,6 +281,7 @@ const router = createBrowserRouter([
       { path: "/more/moderation/activities", element: <ModerationScreen tab="activities" /> },
       { path: "/more/moderation/team", element: <TeamScreen /> },
       { path: "/more/moderation/sports", element: <SportsAdminScreen /> },
+      { path: "/more/moderation/partners", element: <PartnersAdminScreen /> },
       { path: "/more/explore-sports", element: <ExploreSportsScreen /> },
       { path: "/more/moderation/members/:id/edit", element: <AdminEditProfileScreen /> },
       { path: "/more/moderation/members/:id/message", element: <SendStaffMessageScreen /> },

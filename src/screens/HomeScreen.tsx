@@ -24,6 +24,7 @@ import { getBlockedProfiles } from '../lib/moderation'
 import { Avatar } from '../components/Avatar'
 import { ActivityCardSkeleton, Skeleton } from '../components/Skeleton'
 import { LatestPatches } from '../components/LatestPatches'
+import { PartnerSlider } from '../components/PartnerSlider'
 import { UpcomingChallenges } from '../components/UpcomingChallenges'
 import { startAppTour } from '../lib/appTour'
 import { hasFinishedTour } from '../lib/onboardingFlags'
@@ -399,6 +400,8 @@ export function HomeScreen() {
           ))}
         </div>
       )}
+
+      <PartnerSlider sports={filter === 'My sports' ? null : [filter]} />
 
       <div className="view-toggle" aria-label="Select view mode" data-tour="home-views">
         <button className={view === 'list' ? 'selected' : ''} onClick={() => setView('list')} type="button" aria-pressed={view === 'list'}>

@@ -16,7 +16,7 @@ import {
   UserRound,
   UsersRound,
   UserRoundPen,
-  type LucideIcon, Telescope } from 'lucide-react'
+  type LucideIcon, Telescope, Handshake } from 'lucide-react'
 import { supabase } from './supabase'
 import { BrandMarkIcon } from '../components/BrandMark'
 
@@ -78,6 +78,7 @@ export const moderationGroup: MenuGroup = {
     { label: 'Reports', href: '/more/moderation', icon: Flag },
     { label: 'Check PRs', href: '/more/moderation/records', icon: Trophy },
     { label: 'Review activities', href: '/more/moderation/activities', icon: ClipboardCheck },
+    { label: 'Partners', href: '/more/moderation/partners', icon: Handshake },
   ],
 }
 
