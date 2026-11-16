@@ -5991,3 +5991,17 @@ textarea:focus::placeholder { color: transparent; }
 
 /* Log in: no slides, so email, password and the button stay above the keyboard. */
 .auth-login-slogan { margin: 4px 0 20px; color: var(--text-secondary); font: 600 22px/1.2 var(--font-display); text-transform: uppercase; letter-spacing: 0.5px; }
+
+/* Onboarding: Allow notifications / Allow location. */
+.permission-visual {
+  display: grid;
+  place-items: center;
+  width: 120px;
+  height: 120px;
+  margin: 24px auto 8px;
+  border-radius: 32px;
+  background: var(--seafoam-subtle);
+  color: var(--seafoam);
+}
+.permission-visual svg { width: 56px; height: 56px; }
+.flow-note { color: var(--text-secondary); font-size: 14px; line-height: 20px; text-align: center; }
