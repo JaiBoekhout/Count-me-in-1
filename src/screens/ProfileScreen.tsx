@@ -768,15 +768,25 @@ export function ProfileScreen() {
 
       <div className="section-heading compact">
         <h2>{isCurrentUser ? "Your sports" : "Sports"}</h2>
-        {isCurrentUser && (
+        <span className="section-heading-actions">
+          {isCurrentUser && (
+            <button
+              type="button"
+              className="text-action"
+              onClick={() => navigate("/profile/sports/edit")}
+            >
+              Edit
+            </button>
+          )}
+          {/* Every sport in the app, to discover something new. */}
           <button
             type="button"
             className="text-action"
-            onClick={() => navigate("/profile/sports/edit")}
+            onClick={() => navigate("/more/explore-sports")}
           >
-            Edit
+            View all
           </button>
-        )}
+        </span>
       </div>
 
       <div className="sport-list">
