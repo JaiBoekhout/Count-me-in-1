@@ -1,4 +1,5 @@
 import { SuburbInput } from '../components/SuburbInput'
+import { markOnboardingComplete, takeReturnPath } from '../lib/authGate'
 import { CalendarDays, Camera, Check, LocateFixed, QrCode, ShieldCheck, Trophy } from 'lucide-react'
 import { useEffect, useMemo, useRef, useState, type ChangeEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -137,6 +138,7 @@ export function OnboardingScreen() {
       }
       if (profile?.onboarding_complete) {
         clearDraft(sessionData.user.id)
+        markOnboardingComplete()
         navigate('/', { replace: true })
         return
       }
@@ -317,7 +319,8 @@ export function OnboardingScreen() {
 
   function finish() {
     void refreshViewerProfile()
-    navigate('/', { replace: true })
+    markOnboardingComplete()
+    navigate(takeReturnPath() ?? '/', { replace: true })
   }
 
   const progress = (stepIndex + 1) / steps.length

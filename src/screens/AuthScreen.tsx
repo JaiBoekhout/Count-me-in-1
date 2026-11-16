@@ -1,4 +1,5 @@
 import { ArrowRight, CheckCircle2, Eye, EyeOff, Mail } from 'lucide-react'
+import { takeReturnPath } from '../lib/authGate'
 import { BrandMark } from '../components/BrandMark'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -122,7 +123,7 @@ export function AuthScreen() {
       return
     }
 
-    navigate(profile?.onboarding_complete ? '/' : '/onboarding')
+    navigate(profile?.onboarding_complete ? takeReturnPath() ?? '/' : '/onboarding')
   }
 
   async function handlePasswordReset() {
