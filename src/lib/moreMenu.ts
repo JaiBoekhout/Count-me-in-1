@@ -41,6 +41,7 @@ export const menuGroups: MenuGroup[] = [
       { label: 'My sports', href: '/more/sports', icon: Dumbbell },
       { label: 'Patches', href: '/profile/patches', icon: Award },
       { label: 'Personal records', href: '/profile/records', icon: Trophy },
+      { label: 'Friend requests', href: '/more/requests', icon: UserPlus },
     ],
   },
   {
@@ -49,7 +50,6 @@ export const menuGroups: MenuGroup[] = [
       { label: 'Find activities', href: '/more/activities', icon: Compass },
       { label: 'Explore sports', href: '/more/explore-sports', icon: Telescope },
       { label: 'Find new crew', href: '/more/crew', icon: Search },
-      { label: 'Friend requests', href: '/more/requests', icon: UserPlus },
       { label: 'Crews', href: '/more/crews', icon: UsersRound },
     ],
   },
