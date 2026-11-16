@@ -6102,3 +6102,19 @@ textarea:focus::placeholder { color: transparent; }
 .year-page .button-lg { display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
 .alert-select { width: 100%; min-height: 48px; padding: 0 12px; border: 1px solid var(--border); border-radius: var(--radius-lg); background: var(--surface-1); color: var(--text-primary); font-size: 16px; }
 .alert-toggle { border: 1px solid var(--border); border-radius: var(--radius-lg); background: var(--surface-1); }
+
+/* Pro: cover photo and favourite spots. */
+.profile-cover { overflow: hidden; height: 150px; margin: 0 -20px; border-bottom: 1px solid var(--border); }
+.profile-cover img { width: 100%; height: 100%; object-fit: cover; }
+.profile-identity.has-cover { margin-top: -52px; position: relative; }
+.cover-preview { display: grid; place-items: center; overflow: hidden; aspect-ratio: 16 / 6; border: 1px dashed var(--border-strong); border-radius: var(--radius-lg); background: var(--surface-1); color: var(--text-muted); }
+.cover-preview img { width: 100%; height: 100%; object-fit: cover; }
+.spot-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.spot-chips.centered { justify-content: center; margin: 4px 0 8px; }
+.spot-chip { display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 999px; background: var(--seafoam-subtle); color: var(--seafoam); font-size: 14px; }
+.spot-chip button { display: grid; place-items: center; border: 0; background: transparent; color: inherit; padding: 0; }
+.spot-chip svg { width: 14px; height: 14px; }
+.spot-add { display: grid; grid-template-columns: 1fr auto; gap: 8px; }
+.spot-add input { min-height: 44px; padding: 0 12px; border: 1px solid var(--border); border-radius: var(--radius-lg); background: var(--surface-1); color: var(--text-primary); font-size: 16px; }
+.more-settings-page .button-md svg { width: 16px; height: 16px; }
+.more-settings-page .button-md { display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
