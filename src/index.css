@@ -6160,3 +6160,14 @@ select:focus { outline-color: var(--seafoam); }
 .delete-account { display: grid; gap: 12px; margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--border); }
 .delete-account-confirm { display: grid; gap: 12px; padding: 16px; border: 1px solid var(--danger); border-radius: var(--radius-lg); background: var(--danger-subtle); }
 .delete-account-confirm p { color: var(--text-primary); line-height: 1.45; }
+
+/* Privacy policy, Terms, Community guidelines. */
+.legal-page { display: grid; gap: 18px; align-content: start; max-width: 760px; }
+.legal-intro { color: var(--text-primary); font-size: 17px; line-height: 1.5; }
+.legal-section { display: grid; gap: 8px; }
+.legal-section h2 { font-size: 22px; }
+.legal-section p { color: var(--text-secondary); line-height: 1.55; }
+.legal-links { display: flex; flex-wrap: wrap; gap: 8px 18px; margin: 8px 0 16px; }
+.legal-links button { border: 0; background: transparent; padding: 4px 0; color: var(--seafoam); font-size: 14px; text-decoration: underline; text-underline-offset: 3px; }
+.auth-legal { margin-top: 16px; color: var(--text-secondary); font-size: 13px; line-height: 1.5; }
+.auth-legal a { color: var(--seafoam); text-decoration: underline; text-underline-offset: 3px; }

@@ -337,6 +337,15 @@ export function AuthScreen() {
             </button>
           </p>
 
+          {isSignUp && (
+            <p className="auth-legal">
+              By creating an account you agree to the{' '}
+              <a href="/terms" onClick={(event) => { event.preventDefault(); navigate('/terms') }}>Terms of use</a>,{' '}
+              <a href="/guidelines" onClick={(event) => { event.preventDefault(); navigate('/guidelines') }}>Community guidelines</a> and{' '}
+              <a href="/privacy" onClick={(event) => { event.preventDefault(); navigate('/privacy') }}>Privacy policy</a>, and confirm you are a man aged 18 or older.
+            </p>
+          )}
+
           {error ? (
             <p className="mt-4 rounded-xl border border-[var(--danger)]/40 bg-[var(--danger-subtle)] px-3 py-2 text-sm text-[var(--danger)]">
               {error}
