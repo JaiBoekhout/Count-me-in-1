@@ -16,7 +16,7 @@ import {
   UserRound,
   UsersRound,
   UserRoundPen,
-  type LucideIcon, Telescope, Handshake, Sparkles } from 'lucide-react'
+  type LucideIcon, Telescope, Handshake, Sparkles, BellRing } from 'lucide-react'
 import { supabase } from './supabase'
 import { BrandMarkIcon } from '../components/BrandMark'
 
@@ -76,6 +76,7 @@ export const proGroup: MenuGroup = {
   title: 'Pro',
   items: [
     { label: 'Your year outside', href: '/profile/year', icon: Sparkles },
+    { label: 'Smart alerts', href: '/more/alerts', icon: BellRing },
   ],
 }
 

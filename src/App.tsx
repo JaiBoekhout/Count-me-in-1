@@ -1,3 +1,4 @@
+import { SmartAlertsScreen } from "./screens/SmartAlertsScreen"
 import { YearInReviewScreen } from "./screens/YearInReviewScreen"
 import { PartnersAdminScreen } from "./screens/PartnersAdminScreen"
 import { SportsAdminScreen } from "./screens/SportsAdminScreen"
@@ -285,6 +286,7 @@ const router = createBrowserRouter([
       { path: "/more/moderation/partners", element: <PartnersAdminScreen /> },
       { path: "/more/explore-sports", element: <ExploreSportsScreen /> },
       { path: "/profile/year", element: <YearInReviewScreen /> },
+      { path: "/more/alerts", element: <SmartAlertsScreen /> },
       { path: "/more/moderation/members/:id/edit", element: <AdminEditProfileScreen /> },
       { path: "/more/moderation/members/:id/message", element: <SendStaffMessageScreen /> },
     ],

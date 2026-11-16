@@ -6100,3 +6100,5 @@ textarea:focus::placeholder { color: transparent; }
 .year-tile strong.small { font-size: 26px; }
 .year-tile span { color: var(--text-secondary); font-size: 13px; }
 .year-page .button-lg { display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
+.alert-select { width: 100%; min-height: 48px; padding: 0 12px; border: 1px solid var(--border); border-radius: var(--radius-lg); background: var(--surface-1); color: var(--text-primary); font-size: 16px; }
+.alert-toggle { border: 1px solid var(--border); border-radius: var(--radius-lg); background: var(--surface-1); }
