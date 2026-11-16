@@ -42,6 +42,7 @@ Alle bestanden zijn veilig om opnieuw te draaien. Weet je niet zeker of je er ee
 | 34 | `supabase/migrations/20261116170000_profile_extras.sql` | Pro: omslagfoto en favoriete spots op je profiel |
 | 35 | `supabase/migrations/20261116180000_stories.sql` | Pro: Stories (verhalen met foto), te melden en te verbergen door het team |
 | 36 | `supabase/migrations/20261116190000_delete_account.sql` | Leden kunnen hun account zelf verwijderen (More > Privacy and safety) |
+| 37 | `supabase/migrations/20261116200000_admin_pro_members.sql` | Admin geeft leden Pro (met einddatum), ziet wie Pro heeft en kan het beëindigen |
 
 ## Zo doe je het (per bestand)
 
@@ -78,3 +79,4 @@ Alle bestanden zijn veilig om opnieuw te draaien. Weet je niet zeker of je er ee
 - **Na 29:** je krijgt onderaan **Success**. Geeft hij een fout over `pg_cron`? Ga dan naar **Database** > **Extensions**, zoek **pg_cron**, zet hem aan en draai 29 opnieuw.
 - **Na 30:** ga als admin naar **More** > **Moderation** > **Sports**, voeg **Fishing** toe en wijzig daarna het icoon. Je krijgt geen foutmelding.
 - **Na 31:** open **Invite a mate**. Bovenaan staat "Invite 4 mates, get a year of Pro free" met 0 of 4.
+- **Na 37:** ga naar **Moderation** > **Pro members**, zoek een lid, kies **1 month** en klik op **Give Pro**. Hij staat onder **Has Pro now**.

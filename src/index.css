@@ -6183,3 +6183,4 @@ select:focus { outline-color: var(--seafoam); }
 .safety-card .button { width: 100%; }
 .help-safety { display: grid; gap: 12px; padding: 16px; border: 1px solid var(--border); border-radius: var(--radius-lg); background: var(--surface-1); }
 .help-safety h2 { font-size: 22px; }
+.pro-pick { width: 100%; border: 0; background: transparent; color: var(--text-primary); text-align: left; cursor: pointer; }
