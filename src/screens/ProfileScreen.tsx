@@ -1,5 +1,5 @@
-import {
 import { SupporterBadge } from "../components/SupporterBadge"
+import {
   ArrowLeft,
   ChevronRight,
   MapPin,
