@@ -1,4 +1,5 @@
 import { ArrowRight, CheckCircle2, Eye, EyeOff, Mail } from 'lucide-react'
+import { takeReturnPath } from '../lib/authGate'
 import { BrandMark } from '../components/BrandMark'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -27,10 +28,12 @@ export function AuthScreen() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
-  const [isSignUp, setIsSignUp] = useState(false)
+  const [isSignUp, setIsSignUp] = useState(() => new URLSearchParams(window.location.search).get('mode') === 'signup')
   const [error, setError] = useState('')
   const [notice, setNotice] = useState('')
   const [isBusy, setIsBusy] = useState(false)
+  // Email that still needs confirming: shows the Resend button.
+  const [unconfirmedEmail, setUnconfirmedEmail] = useState('')
   const [activeSlide, setActiveSlide] = useState(0)
   const copy = getTranslations(language)
   const slides = featureSlides[language]
@@ -92,7 +95,11 @@ export function AuthScreen() {
       if (data.session) {
         navigate('/onboarding')
       } else {
+        // Email confirmation is on: switch to Log in so they can sign in after confirming.
         setNotice(copy.signUpEmailSent)
+        setUnconfirmedEmail(normalizedEmail)
+        setIsSignUp(false)
+        setPassword('')
       }
       return
     }
@@ -104,7 +111,13 @@ export function AuthScreen() {
 
     if (signInError) {
       setIsBusy(false)
-      const isInvalidCredentials = signInError.status === 400 || signInError.message.toLowerCase().includes('invalid login credentials')
+      const message = signInError.message.toLowerCase()
+      if (message.includes('email not confirmed')) {
+        setError(copy.emailNotConfirmed)
+        setUnconfirmedEmail(normalizedEmail)
+        return
+      }
+      const isInvalidCredentials = signInError.status === 400 || message.includes('invalid login credentials')
       setError(isInvalidCredentials ? copy.invalidLogin : signInError.message)
       return
     }
@@ -122,7 +135,21 @@ export function AuthScreen() {
       return
     }
 
-    navigate(profile?.onboarding_complete ? '/' : '/onboarding')
+    navigate(profile?.onboarding_complete ? takeReturnPath() ?? '/' : '/onboarding')
+  }
+
+  async function resendConfirmation() {
+    if (!supabase || !unconfirmedEmail) return
+    setIsBusy(true)
+    setError('')
+    const { error: resendError } = await supabase.auth.resend({
+      type: 'signup',
+      email: unconfirmedEmail,
+      options: { emailRedirectTo: `${window.location.origin}/` },
+    })
+    setIsBusy(false)
+    if (resendError) setError(resendError.message)
+    else setNotice(copy.emailResent)
   }
 
   async function handlePasswordReset() {
@@ -157,7 +184,7 @@ export function AuthScreen() {
   }
 
   return (
-    <div className="min-h-screen bg-[var(--bg)] px-5 py-8 text-[var(--text-primary)]">
+    <div className={`min-h-screen bg-[var(--bg)] px-5 text-[var(--text-primary)] ${isSignUp ? 'py-8' : 'py-5'}`}>
       <div className="mx-auto max-w-md">
         <div className="mb-5 flex items-center justify-between gap-3">
           <div className="flex items-center gap-3">
@@ -185,6 +212,11 @@ export function AuthScreen() {
           </div>
         </div>
 
+        {!isSignUp && (
+          <p className="auth-login-slogan">{copy.loginSlogan}</p>
+        )}
+
+        {isSignUp && (
         <section className="auth-carousel" aria-label="Count Me In features" aria-roledescription="carousel">
           {slides.map((slide, index) => (
             <img
@@ -214,16 +246,29 @@ export function AuthScreen() {
             ))}
           </div>
         </section>
+        )}
 
-        <div className="rounded-3xl border border-[var(--border)] bg-[var(--surface-1)] p-5 shadow-2xl shadow-black/20">
-          <div className="mb-6 flex items-center gap-2 rounded-2xl bg-[var(--seafoam-subtle)] px-3 py-2 text-sm text-[var(--seafoam)]">
-            <Mail className="h-4 w-4 text-[var(--seafoam)]" />
-            <span>{isSignUp ? copy.createAccountSubtitle : copy.authSubtitle}</span>
-          </div>
+        <form
+          noValidate
+          onSubmit={(event) => {
+            event.preventDefault()
+            void handleContinue()
+          }}
+          className="rounded-3xl border border-[var(--border)] bg-[var(--surface-1)] p-5 shadow-2xl shadow-black/20">
+          {isSignUp && (
+            <div className="mb-6 flex items-center gap-2 rounded-2xl bg-[var(--seafoam-subtle)] px-3 py-2 text-sm text-[var(--seafoam)]">
+              <Mail className="h-4 w-4 text-[var(--seafoam)]" />
+              <span>{copy.createAccountSubtitle}</span>
+            </div>
+          )}
 
           <label className="mb-2 block text-sm text-[var(--text-primary)]">{copy.emailLabel}</label>
           <input
             type="email"
+            inputMode="email"
+            autoComplete="email"
+            autoCapitalize="none"
+            enterKeyHint="next"
             value={email}
             onChange={(event) => setEmail(event.target.value)}
             placeholder={copy.emailPlaceholder}
@@ -235,6 +280,8 @@ export function AuthScreen() {
             <input
               id="auth-password"
               type={showPassword ? 'text' : 'password'}
+              autoComplete={isSignUp ? 'new-password' : 'current-password'}
+              enterKeyHint="go"
               value={password}
               onChange={(event) => setPassword(event.target.value)}
               placeholder={copy.passwordPlaceholder}
@@ -253,6 +300,16 @@ export function AuthScreen() {
             </button>
           </div>
 
+
+          <button
+            type="submit"
+            disabled={isBusy}
+            className="mt-5 flex w-full items-center justify-center gap-2 rounded-2xl bg-[var(--accent)] px-4 py-3 font-semibold text-[var(--on-accent)] transition hover:bg-[var(--accent-hover)] disabled:opacity-60"
+          >
+            {isBusy ? (isSignUp ? copy.creatingAccount : copy.sending) : (isSignUp ? copy.createAccount : copy.signIn)}
+            <ArrowRight className="h-4 w-4" />
+          </button>
+
           {!isSignUp && (
             <button
               type="button"
@@ -263,16 +320,6 @@ export function AuthScreen() {
               {isBusy ? copy.sendingResetLink : copy.forgotPassword}
             </button>
           )}
-
-          <button
-            type="button"
-            onClick={handleContinue}
-            disabled={isBusy}
-            className="mt-5 flex w-full items-center justify-center gap-2 rounded-2xl bg-[var(--accent)] px-4 py-3 font-semibold text-[var(--on-accent)] transition hover:bg-[var(--accent-hover)] disabled:opacity-60"
-          >
-            {isBusy ? (isSignUp ? copy.creatingAccount : copy.sending) : (isSignUp ? copy.createAccount : copy.signIn)}
-            <ArrowRight className="h-4 w-4" />
-          </button>
 
           <p className="mt-6 text-center text-sm text-[var(--text-secondary)]">
             {isSignUp ? copy.haveAccount : copy.noAccount}{' '}
@@ -300,7 +347,17 @@ export function AuthScreen() {
               {notice}
             </p>
           ) : null}
-        </div>
+          {unconfirmedEmail && !isSignUp ? (
+            <button
+              type="button"
+              onClick={() => void resendConfirmation()}
+              disabled={isBusy}
+              className="mt-3 min-h-11 text-sm font-medium text-[var(--seafoam)] underline-offset-4 hover:underline disabled:opacity-60"
+            >
+              {copy.resendEmail}
+            </button>
+          ) : null}
+        </form>
       </div>
     </div>
   )

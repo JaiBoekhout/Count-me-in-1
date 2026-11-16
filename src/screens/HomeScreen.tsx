@@ -1,4 +1,5 @@
 import { Suspense, lazy, useEffect, useMemo, useRef, useState } from 'react'
+import { supabase } from '../lib/supabase'
 import { Bell, Bike, CalendarDays, Check, ChevronDown, ChevronLeft, ChevronRight, Dumbbell, Fish, Footprints, ListFilter, MapPin, Mountain, Waves } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { ActivityCard, type ActivityCardData } from '../components/ActivityCard'
@@ -204,6 +205,8 @@ export function HomeScreen() {
         joinStatus: viewerJoinStatus ?? undefined,
       }),
     )
+    // Demo activities only without Supabase (local demo), never for real members.
+    if (supabase) return savedCards
     const demoCards: ActivityCardData[] = activities.map((activity) => ({
       ...activity,
       joinStatus: hasDemoJoinRequest(activity.id) ? 'pending' : undefined,
@@ -441,7 +444,7 @@ export function HomeScreen() {
             <>
               {activityLoadError && (
                 <p className="activity-feed-notice" role="status">
-                  Saved activities could not be loaded. Showing demo activities.
+                  Activities could not be loaded. Pull down or open the app again.
                   {" "}{activityLoadError}
                 </p>
               )}

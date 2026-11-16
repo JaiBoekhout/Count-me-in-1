@@ -653,7 +653,13 @@ export function ActivityDetailScreen() {
           // Duration is shown once below, from the activity itself.
           .filter(([key, value]) => value.trim() !== "" && !/^duration/i.test(key))
           .map(([key, value]) => ({
-            label: key === "kite_sizes" ? "Kites" : key.replace(/_/g, " "),
+            label: key === "kite_sizes"
+              ? "Kites"
+              : key === "gym_setup"
+                ? "Gym set-up"
+                : key === "distance_km"
+                  ? "Distance (km)"
+                  : key.replace(/_/g, " ").replace(/^./, (letter) => letter.toUpperCase()),
             value,
           })),
         {
@@ -732,10 +738,16 @@ export function ActivityDetailScreen() {
     : mockActivity?.startsAt
   // The activity day counts in the time zone of the place, like the database does.
   const activityTimeZone = placeTimeZone(savedDetails?.suburb ?? mockActivity?.suburb)
+  // Check-in opens on the activity day (place time zone) and closes 24 hours
+  // after the start, like the database does.
+  const checkInClosed =
+    activityStart !== undefined &&
+    Date.now() > activityStart.getTime() + 24 * 60 * 60 * 1000
   const isActivityDay =
     activityStart !== undefined &&
-    dateKeyInTimeZone(activityStart, activityTimeZone) ===
-      dateKeyInTimeZone(new Date(), activityTimeZone)
+    !checkInClosed &&
+    dateKeyInTimeZone(new Date(), activityTimeZone) >=
+      dateKeyInTimeZone(activityStart, activityTimeZone)
   const isHost =
     savedDetails?.viewerIsHost ?? mockActivity?.host === currentUser.name
   const canEditActivity = savedDetails?.viewerCanEdit ?? false
@@ -1064,6 +1076,11 @@ export function ActivityDetailScreen() {
                     {confirmed ? "Confirmed" : "Check in"}
                   </Button>
                 )}
+                {checkInClosed && (
+                  <Button size="lg" disabled>
+                    {confirmed ? "Confirmed" : "Check-in closed"}
+                  </Button>
+                )}
               </>
             ) : isActivityDay ? (
               <Button
@@ -1094,6 +1111,10 @@ export function ActivityDetailScreen() {
                   disabled={confirmed || isLoadingConfirmation}
                 >
                   {confirmed ? "Confirmed" : "Check in"}
+                </Button>
+              ) : checkInClosed ? (
+                <Button size="lg" disabled>
+                  {confirmed ? "Confirmed" : "Check-in closed"}
                 </Button>
               ) : (
                 savedDetails && (

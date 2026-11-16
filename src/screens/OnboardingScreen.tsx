@@ -1,5 +1,6 @@
 import { SuburbInput } from '../components/SuburbInput'
-import { CalendarDays, Camera, Check, LocateFixed, QrCode, ShieldCheck, Trophy } from 'lucide-react'
+import { markOnboardingComplete, takeReturnPath } from '../lib/authGate'
+import { Bell, CalendarDays, Camera, Check, LocateFixed, QrCode, ShieldCheck, Trophy } from 'lucide-react'
 import { useEffect, useMemo, useRef, useState, type ChangeEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ClaimPrDialog } from '../components/ClaimPrDialog'
@@ -10,13 +11,15 @@ import { SportIcon } from '../components/SportIcon'
 import {
   calculateAgeFromDateOfBirth,
   saveProfile,
+  saveSharedLocation,
   uploadProfilePhoto,
   type SkillLevel,
 } from '../lib/profile'
 import { getSupabaseSetupHint, supabase } from '../lib/supabase'
 import { refreshViewerProfile } from '../lib/viewerProfile'
 import { sportNames } from '../data/sports'
-import { getDeviceLocation, nearestSuburb } from '../lib/distance'
+import { defaultRadiusKm, getDeviceLocation, nearestSuburb, roundCoordinates, setLocationPreference } from '../lib/distance'
+import { enablePush, getPushState } from '../lib/push'
 import { loadLocalities } from '../lib/localities'
 
 const sportOptions: string[] = sportNames
@@ -25,8 +28,8 @@ const skillOptions: SkillLevel[] = ['Beginner', 'Intermediate', 'Experienced']
 
 // One question per screen. Name, date of birth and suburb are required; the
 // rest can be skipped and filled in later from the profile.
-type Step = 'name' | 'birthday' | 'suburb' | 'sports' | 'levels' | 'availability' | 'patches' | 'record'
-const steps: Step[] = ['name', 'birthday', 'suburb', 'sports', 'levels', 'availability', 'patches', 'record']
+type Step = 'name' | 'birthday' | 'suburb' | 'sports' | 'levels' | 'availability' | 'notifications' | 'location' | 'patches' | 'record'
+const steps: Step[] = ['name', 'birthday', 'suburb', 'sports', 'levels', 'availability', 'notifications', 'location', 'patches', 'record']
 
 // Answers are kept on this device while you go, so closing the app or browser
 // halfway does not lose them: you continue at the step where you left off.
@@ -108,6 +111,8 @@ export function OnboardingScreen() {
   const [userId, setUserId] = useState<string | null>(null)
   const [photoDataUrl, setPhotoDataUrl] = useState<string | null>(null)
   const [isLocating, setIsLocating] = useState(false)
+  const [permissionBusy, setPermissionBusy] = useState(false)
+  const [permissionNote, setPermissionNote] = useState('')
   const age = useMemo(() => calculateAgeFromDateOfBirth(dateOfBirth), [dateOfBirth])
   const step = steps[stepIndex]
 
@@ -137,6 +142,7 @@ export function OnboardingScreen() {
       }
       if (profile?.onboarding_complete) {
         clearDraft(sessionData.user.id)
+        markOnboardingComplete()
         navigate('/', { replace: true })
         return
       }
@@ -307,7 +313,7 @@ export function OnboardingScreen() {
       setProfileSaved(true)
       clearDraft(userData.user.id)
       if (skipRest) finish()
-      else goTo(steps.indexOf('patches'))
+      else goTo(steps.indexOf('notifications'))
     } catch (saveError) {
       setError(saveError instanceof Error ? saveError.message : 'Unable to save your profile.')
     } finally {
@@ -317,11 +323,12 @@ export function OnboardingScreen() {
 
   function finish() {
     void refreshViewerProfile()
-    navigate('/', { replace: true })
+    markOnboardingComplete()
+    navigate(takeReturnPath() ?? '/', { replace: true })
   }
 
   const progress = (stepIndex + 1) / steps.length
-  const onBack = stepIndex > 0 && !(profileSaved && stepIndex <= steps.indexOf('patches'))
+  const onBack = stepIndex > 0 && !(profileSaved && stepIndex <= steps.indexOf('notifications'))
     ? () => goTo(previousIndexBefore(stepIndex))
     : undefined
   const errorBox = error ? <p className="flow-error" role="alert">{error}</p> : null
@@ -504,6 +511,87 @@ export function OnboardingScreen() {
           })}
         </div>
         {errorBox}
+      </FlowLayout>
+    )
+  }
+
+  // Opens the phone's own "Allow notifications" question.
+  async function allowNotifications() {
+    setPermissionBusy(true)
+    setPermissionNote('')
+    try {
+      const state = await getPushState()
+      if (state === 'needs-install') {
+        setPermissionNote('On iPhone, first add Count Me In to your home screen (Share > Add to Home Screen) and open it from there. You can turn this on later in More > Notification settings.')
+        return
+      }
+      if (state === 'unsupported') {
+        setPermissionNote('This browser cannot show notifications. You can try again later in More > Notification settings.')
+        return
+      }
+      if (state !== 'on') await enablePush()
+      goTo(stepIndex + 1)
+    } catch (pushError) {
+      setPermissionNote(pushError instanceof Error ? pushError.message : 'Notifications could not be turned on. You can do this later in More > Notification settings.')
+    } finally {
+      setPermissionBusy(false)
+    }
+  }
+
+  // Opens the phone's own location question. Only an approximate spot (about 1 km) is shared.
+  async function allowLocation() {
+    setPermissionBusy(true)
+    setPermissionNote('')
+    try {
+      const [point] = await Promise.all([getDeviceLocation(), loadLocalities()])
+      setLocationPreference({
+        mode: 'current',
+        label: nearestSuburb(point),
+        latitude: point.latitude,
+        longitude: point.longitude,
+        radiusKm: defaultRadiusKm,
+      })
+      if (userId) await saveSharedLocation(userId, roundCoordinates(point)).catch(() => undefined)
+      goTo(stepIndex + 1)
+    } catch (locateError) {
+      setPermissionNote(locateError instanceof Error ? locateError.message : 'Your location could not be found. You can set it later on Home.')
+    } finally {
+      setPermissionBusy(false)
+    }
+  }
+
+  if (step === 'notifications') {
+    return (
+      <FlowLayout
+        progress={progress}
+        title={<>Never miss <em>a callout</em></>}
+        subtitle="Get a message when someone wants to join, when your crew chats, and an hour before you head out."
+        onSkip={() => { setPermissionNote(''); goTo(stepIndex + 1) }}
+        skipLabel="Not now"
+        primaryLabel={permissionBusy ? 'Asking your phone…' : 'Allow notifications'}
+        primaryDisabled={permissionBusy}
+        onPrimary={() => void allowNotifications()}
+      >
+        <div className="permission-visual" aria-hidden="true"><Bell /></div>
+        {permissionNote && <p className="flow-note" role="status">{permissionNote}</p>}
+      </FlowLayout>
+    )
+  }
+
+  if (step === 'location') {
+    return (
+      <FlowLayout
+        progress={progress}
+        title={<>See what's on <em>near you</em></>}
+        subtitle="We use your location to show activities and mates nearby. Others only ever see roughly where you are (about 1 km), never your exact spot."
+        onSkip={() => { setPermissionNote(''); goTo(stepIndex + 1) }}
+        skipLabel="Not now"
+        primaryLabel={permissionBusy ? 'Asking your phone…' : 'Allow location'}
+        primaryDisabled={permissionBusy}
+        onPrimary={() => void allowLocation()}
+      >
+        <div className="permission-visual" aria-hidden="true"><LocateFixed /></div>
+        {permissionNote && <p className="flow-note" role="status">{permissionNote}</p>}
       </FlowLayout>
     )
   }

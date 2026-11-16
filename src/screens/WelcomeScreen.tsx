@@ -138,7 +138,8 @@ export function WelcomeScreen() {
     markWelcomeSeen()
     // Opened again from Help while signed in: back to the app, not to sign in.
     const session = supabase ? (await supabase.auth.getSession()).data.session : null
-    navigate(session ? '/' : '/login', { replace: true })
+    // New visitors land on Create account; Log in is one tap away.
+    navigate(session ? '/' : '/login?mode=signup', { replace: true })
   }
 
   return (

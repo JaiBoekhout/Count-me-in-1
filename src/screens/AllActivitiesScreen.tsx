@@ -1,4 +1,5 @@
 import { ArrowLeft, Search, SlidersHorizontal } from 'lucide-react'
+import { supabase } from '../lib/supabase'
 import { useEffect, useMemo, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { ActivityCard, type ActivityCardData } from '../components/ActivityCard'
@@ -59,7 +60,8 @@ export function AllActivitiesScreen() {
 
   const allActivities = useMemo<ActivityCardData[]>(() => [
     ...feed.map(({ viewerJoinStatus, ...activity }) => ({ ...activity, joinStatus: viewerJoinStatus ?? undefined })),
-    ...demoActivities.map((activity) => ({ ...activity, joinStatus: hasDemoJoinRequest(activity.id) ? 'pending' as const : undefined })),
+    // Demo activities only in the local demo (no Supabase), never for real members.
+    ...(supabase ? [] : demoActivities.map((activity) => ({ ...activity, joinStatus: hasDemoJoinRequest(activity.id) ? 'pending' as const : undefined }))),
   ], [feed])
   // Every sport from Edit my sports, plus any sport only used on an activity.
   const sportCatalog = useSportCatalog()

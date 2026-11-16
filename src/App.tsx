@@ -1,4 +1,6 @@
 import { PatchCelebration } from "./components/PatchCelebration"
+import { BrandMark } from "./components/BrandMark"
+import { rememberReturnPath, takeReturnPath, useAuthGate } from "./lib/authGate"
 import {
   createBrowserRouter,
   Navigate,
@@ -51,7 +53,8 @@ import { getUnreadDirectChatCount } from "./lib/directChats"
 import { getOpenStaffMessageCount } from "./lib/staffMessages"
 import { ModerationScreen } from "./screens/ModerationScreen"
 
-const pathsWithoutWelcome = ["/welcome", "/login", "/reset-password", "/onboarding"]
+// Pages you can open without being signed in.
+const publicPaths = ["/welcome", "/login", "/reset-password"]
 const sideNavCollapsedKey = "count-me-in-side-nav-collapsed"
 
 // Read before Supabase handles the link: a password reset link (or its error,
@@ -79,22 +82,27 @@ function AppShell() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  // First visit without an account: show the welcome slides first.
+  // Only signed-in members who finished onboarding see the app. Everyone else
+  // gets the welcome slides (first visit), the login screen or onboarding.
+  const gate = useAuthGate()
+  const isPublicPath = publicPaths.includes(path)
   useEffect(() => {
-    if (isPasswordLinkLanding || hasSeenWelcome() || pathsWithoutWelcome.includes(location.pathname)) return
-    let active = true
-    async function checkFirstVisit() {
-      if (!supabase) return
-      const { data } = await supabase.auth.getSession()
-      if (active && !data.session) navigate("/welcome", { replace: true })
+    if (isPasswordLinkLanding) return
+    if (gate === 'signedOut' && !isPublicPath) {
+      rememberReturnPath(location.pathname + location.search)
+      navigate(hasSeenWelcome() ? '/login' : '/welcome', { replace: true })
+    } else if (gate === 'needsOnboarding' && path !== '/onboarding' && path !== '/reset-password') {
+      navigate('/onboarding', { replace: true })
+    } else if (gate === 'ready' && (path === '/login' || path === '/welcome')) {
+      navigate(takeReturnPath() ?? '/', { replace: true })
     }
-    void checkFirstVisit()
-    return () => {
-      active = false
-    }
-    // Only on first load of the app.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [gate, path, isPublicPath, location.pathname, location.search, navigate])
+  const blocked =
+    !isPasswordLinkLanding &&
+    (gate === 'checking' ||
+      (gate === 'signedOut' && !isPublicPath) ||
+      (gate === 'needsOnboarding' && path !== '/onboarding' && path !== '/reset-password'))
+
   const isWideChatLayout = useMediaQuery(wideChatLayoutQuery)
   // Desktop side nav: collapsed to icons or not, remembered on this device.
   const [sideNavCollapsed, setSideNavCollapsed] = useState(() => {
@@ -196,10 +204,16 @@ function AppShell() {
         }
       />
       {/* A size container: grids follow the space next to the side nav, not the window. */}
+      {blocked ? (
+        <div className="app-gate-splash" role="status" aria-label="Loading Count Me In">
+          <BrandMark className="app-gate-logo" />
+        </div>
+      ) : (
       <div className={`app-content${showNav ? " with-nav" : ""}${sideNavCollapsed ? " nav-collapsed" : ""}`}>
         <Outlet />
       </div>
-      {showNav && (
+      )}
+      {showNav && !blocked && (
         <BottomNav
           active={activeTab}
           hasUnreadChats={hasUnreadChats}
