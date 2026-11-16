@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react"
+import { deleteMyAccount } from '../lib/deleteAccount'
 import { ListSkeleton } from '../components/Skeleton'
 import { MorePageHeader } from "../components/MorePageHeader"
 import { useBackToMore } from "../lib/moreNavigation"
@@ -28,6 +29,9 @@ export function PrivacySettingsScreen() {
   const [visibility, setVisibility] = useState<ProfileVisibility>("members")
   const [blockedUsers, setBlockedUsers] = useState<BlockedProfile[]>([])
   const [error, setError] = useState("")
+  const [deleteOpen, setDeleteOpen] = useState(false)
+  const [deleteText, setDeleteText] = useState('')
+  const [isDeleting, setIsDeleting] = useState(false)
   const [isLoadingBlocks, setIsLoadingBlocks] = useState(true)
 
   useEffect(() => {
@@ -53,6 +57,22 @@ export function PrivacySettingsScreen() {
       active = false
     }
   }, [])
+
+  async function handleDeleteAccount() {
+    setIsDeleting(true)
+    setError('')
+    try {
+      await deleteMyAccount()
+      window.location.replace('/login')
+    } catch (deleteError) {
+      setError(
+        typeof deleteError === 'object' && deleteError !== null && 'message' in deleteError
+          ? `Your account could not be deleted: ${String((deleteError as { message: unknown }).message)}`
+          : 'Your account could not be deleted. Try again or contact us via Help and feedback.',
+      )
+      setIsDeleting(false)
+    }
+  }
 
   function updateVisibility(nextVisibility: ProfileVisibility) {
     try {
@@ -148,6 +168,39 @@ export function PrivacySettingsScreen() {
           {error}
         </p>
       )}
+
+      <section className="delete-account" aria-labelledby="delete-account-heading">
+        <h3 id="delete-account-heading" className="more-settings-subtitle">Delete account</h3>
+        {!deleteOpen ? (
+          <button type="button" className="button button-destructive button-md" onClick={() => setDeleteOpen(true)}>
+            Delete my account
+          </button>
+        ) : (
+          <div className="delete-account-confirm">
+            <p>
+              This permanently deletes your profile, photos, activities you host, chats,
+              patches, personal records and stories. It cannot be undone.
+            </p>
+            <label className="edit-field">
+              <span>Type DELETE to confirm</span>
+              <input value={deleteText} autoCapitalize="characters" onChange={(event) => setDeleteText(event.target.value)} />
+            </label>
+            <div className="partner-form-row">
+              <button type="button" className="button button-secondary button-md" disabled={isDeleting} onClick={() => { setDeleteOpen(false); setDeleteText('') }}>
+                Keep my account
+              </button>
+              <button
+                type="button"
+                className="button button-destructive button-md"
+                disabled={deleteText.trim().toUpperCase() !== 'DELETE' || isDeleting}
+                onClick={() => void handleDeleteAccount()}
+              >
+                {isDeleting ? 'Deleting…' : 'Delete forever'}
+              </button>
+            </div>
+          </div>
+        )}
+      </section>
     </main>
   )
 }

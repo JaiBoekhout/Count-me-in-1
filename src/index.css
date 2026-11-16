@@ -6155,3 +6155,8 @@ select:not(#none) {
   background-repeat: no-repeat;
 }
 select:focus { outline-color: var(--seafoam); }
+
+/* Privacy and safety: Delete account. */
+.delete-account { display: grid; gap: 12px; margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--border); }
+.delete-account-confirm { display: grid; gap: 12px; padding: 16px; border: 1px solid var(--danger); border-radius: var(--radius-lg); background: var(--danger-subtle); }
+.delete-account-confirm p { color: var(--text-primary); line-height: 1.45; }
