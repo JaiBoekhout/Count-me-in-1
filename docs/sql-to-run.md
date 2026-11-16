@@ -40,6 +40,7 @@ Alle bestanden zijn veilig om opnieuw te draaien. Weet je niet zeker of je er ee
 | 32 | `supabase/migrations/20261116150000_supporter_badge.sql` | Supporter-badge op profielen van leden met Pro |
 | 33 | `supabase/migrations/20261116160000_smart_alerts.sql` | Pro: slimme meldingen bij een nieuwe activiteit die bij je past (sport, afstand, weekend) |
 | 34 | `supabase/migrations/20261116170000_profile_extras.sql` | Pro: omslagfoto en favoriete spots op je profiel |
+| 35 | `supabase/migrations/20261116180000_stories.sql` | Pro: Stories (verhalen met foto), te melden en te verbergen door het team |
 
 ## Zo doe je het (per bestand)
 

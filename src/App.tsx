@@ -1,3 +1,4 @@
+import { StoriesScreen } from "./screens/StoriesScreen"
 import { ProfileStyleScreen } from "./screens/ProfileStyleScreen"
 import { SmartAlertsScreen } from "./screens/SmartAlertsScreen"
 import { YearInReviewScreen } from "./screens/YearInReviewScreen"
@@ -289,6 +290,7 @@ const router = createBrowserRouter([
       { path: "/profile/year", element: <YearInReviewScreen /> },
       { path: "/more/alerts", element: <SmartAlertsScreen /> },
       { path: "/profile/style", element: <ProfileStyleScreen /> },
+      { path: "/stories", element: <StoriesScreen /> },
       { path: "/more/moderation/members/:id/edit", element: <AdminEditProfileScreen /> },
       { path: "/more/moderation/members/:id/message", element: <SendStaffMessageScreen /> },
     ],
