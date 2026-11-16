@@ -6171,3 +6171,15 @@ select:focus { outline-color: var(--seafoam); }
 .legal-links button { border: 0; background: transparent; padding: 4px 0; color: var(--seafoam); font-size: 14px; text-decoration: underline; text-underline-offset: 3px; }
 .auth-legal { margin-top: 16px; color: var(--text-secondary); font-size: 13px; line-height: 1.5; }
 .auth-legal a { color: var(--seafoam); text-decoration: underline; text-underline-offset: 3px; }
+
+/* Safety tips (Help, and once before your first meetup). */
+.safety-tips { display: grid; gap: 12px; list-style: none; margin: 0; padding: 0; text-align: left; width: 100%; }
+.safety-tips li { display: flex; gap: 12px; align-items: flex-start; }
+.safety-tips strong { display: block; font-size: 15px; }
+.safety-tips small { display: block; color: var(--text-secondary); font-size: 13px; line-height: 1.4; }
+.safety-tip-icon { display: grid; place-items: center; width: 36px; height: 36px; flex: 0 0 auto; border-radius: var(--radius-md); background: var(--seafoam-subtle); color: var(--seafoam); }
+.safety-tip-icon svg { width: 18px; height: 18px; }
+.safety-card { gap: 14px; }
+.safety-card .button { width: 100%; }
+.help-safety { display: grid; gap: 12px; padding: 16px; border: 1px solid var(--border); border-radius: var(--radius-lg); background: var(--surface-1); }
+.help-safety h2 { font-size: 22px; }

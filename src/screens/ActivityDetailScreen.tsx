@@ -1,3 +1,4 @@
+import { SafetyTipsOnce } from "../components/SafetyTips"
 import { DetailSkeleton } from '../components/Skeleton'
 import {
   ArrowLeft,
@@ -801,6 +802,7 @@ export function ActivityDetailScreen() {
 
   return (
     <main className="detail-layout">
+      <SafetyTipsOnce show={Boolean(savedDetails) && (isHost || isJoined)} />
       <section className="detail-hero">
         <img src={activity.hero} alt={activity.title} />
         <div className="hero-scrim" />

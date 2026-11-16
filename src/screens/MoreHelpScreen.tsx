@@ -1,3 +1,4 @@
+import { SafetyTipList } from '../components/SafetyTips'
 import { ClipboardCopy, Compass, Presentation } from 'lucide-react'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -35,6 +36,10 @@ export function MoreHelpScreen() {
   return (
     <main className="screen more-settings-page">
       <MorePageHeader title="Help and feedback" eyebrow="Support" onBack={backToMore} />
+      <section className="help-safety" aria-labelledby="help-safety-heading">
+        <h2 id="help-safety-heading">Meet up safely</h2>
+        <SafetyTipList />
+      </section>
       <section className="help-tour-actions" aria-label="Get to know the app">
         <button
           type="button"
