@@ -16,7 +16,7 @@ import {
   UserRound,
   UsersRound,
   UserRoundPen,
-  type LucideIcon, Telescope, Handshake } from 'lucide-react'
+  type LucideIcon, Telescope, Handshake, Sparkles } from 'lucide-react'
 import { supabase } from './supabase'
 import { BrandMarkIcon } from '../components/BrandMark'
 
@@ -70,6 +70,14 @@ export const menuGroups: MenuGroup[] = [
     ],
   },
 ]
+
+// Pro features (now only for the team, later for Supporters).
+export const proGroup: MenuGroup = {
+  title: 'Pro',
+  items: [
+    { label: 'Your year outside', href: '/profile/year', icon: Sparkles },
+  ],
+}
 
 // Only for admins and moderators.
 export const moderationGroup: MenuGroup = {
