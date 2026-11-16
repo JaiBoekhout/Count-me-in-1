@@ -14,6 +14,7 @@ import {
   type MySavedActivity,
 } from "../lib/activityParticipation"
 import { hasDemoJoinRequest } from "../lib/demoParticipation"
+import { supabase } from "../lib/supabase"
 
 export function MyActivitiesScreen() {
   const navigate = useNavigate()
@@ -62,16 +63,21 @@ export function MyActivitiesScreen() {
     }
   }, [])
 
+  // Signed in: only your real activities (never demo ones). Without Supabase
+  // (local demo) the demo activities are shown.
+  const isDemo = !supabase
   const displayedActivities: Array<{
     activity: ActivityCardData
     status: "going" | "hosting" | "requested"
     pendingRequestCount: number
-  }> = savedActivities.length
+    isPast: boolean
+  }> = !isDemo
     ? savedActivities.map(
-        ({ joinStatus, pendingRequestCount, ...activity }) => ({
+        ({ joinStatus, pendingRequestCount, isPast, ...activity }) => ({
           activity,
           status: joinStatus,
           pendingRequestCount,
+          isPast,
         }),
       )
     : [
@@ -93,9 +99,14 @@ export function MyActivitiesScreen() {
               },
               status: isRequested ? ("requested" as const) : defaultStatus,
               pendingRequestCount: 0,
+              isPast: false,
             }
           }),
       ]
+  const upcomingActivities = displayedActivities.filter((item) => !item.isPast)
+  const pastActivities = displayedActivities
+    .filter((item) => item.isPast && item.status !== "requested")
+    .sort((left, right) => right.activity.startsAt.getTime() - left.activity.startsAt.getTime())
 
   async function answerInvite(
     invite: InvitedActivity,
@@ -253,10 +264,16 @@ export function MyActivitiesScreen() {
         </p>
       ) : isLoading ? (
         <ActivityCardsSkeleton label="Loading your activities" />
+      ) : segment === "upcoming" && upcomingActivities.length === 0 ? (
+        <div className="empty-state-card compact">
+          <h3>No plans yet</h3>
+          <p>Join an activity or post your own callout.</p>
+          <Button variant="secondary" onClick={() => navigate("/more/activities")}>Find activities</Button>
+        </div>
       ) : segment === "upcoming" ? (
         <div className="my-activities-sections">
           {(["going", "hosting", "requested"] as const).map((status) => {
-            const items = displayedActivities.filter(
+            const items = upcomingActivities.filter(
               (item) => item.status === status,
             )
             if (items.length === 0) return null
@@ -290,10 +307,20 @@ export function MyActivitiesScreen() {
             )
           })}
         </div>
+      ) : pastActivities.length > 0 ? (
+        <div className="card-list">
+          {pastActivities.map(({ activity, status }) => (
+            <ActivityCard
+              key={activity.id}
+              activity={{ ...activity, viewerIsHost: status === "hosting" }}
+              onClick={() => navigate(`/activity/${activity.id}`)}
+            />
+          ))}
+        </div>
       ) : (
         <div className="empty-state-card compact">
           <h3>No past activities yet</h3>
-          <p>Confirmed meetups will show here after they happen.</p>
+          <p>Activities you went to or hosted show here a day after they happen.</p>
         </div>
       )}
     </div>

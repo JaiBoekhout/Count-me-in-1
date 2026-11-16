@@ -32,6 +32,8 @@ export type MySavedActivity = Omit<Activity, "id"> & {
   id: string
   joinStatus: "hosting" | "requested" | "going"
   pendingRequestCount: number
+  // More than 24 hours after the start (check-in closed): shown under Past.
+  isPast: boolean
 }
 
 export type FeedActivity = Omit<Activity, "id"> & {
@@ -446,8 +448,10 @@ export async function getMySavedActivities(): Promise<MySavedActivity[]> {
             )
           : []
       const icon: ActivityIcon = getSportIcon(sport)
-      const isUpcoming = Date.parse(activity.starts_at) >= Date.now()
-      if (!isUpcoming) return []
+      // Stays under Upcoming until check-in closes (24 hours after the start).
+      const isPast = Date.parse(activity.starts_at) + 24 * 60 * 60 * 1000 < Date.now()
+      // A request nobody answered before the activity is not worth keeping.
+      if (isPast && ownRequest?.status === "pending" && !isHost) return []
 
       return [
         {
@@ -484,6 +488,7 @@ export async function getMySavedActivities(): Promise<MySavedActivity[]> {
             ? activityRequests.filter((request) => request.status === "pending")
                 .length
             : 0,
+          isPast,
         },
       ]
     })
