@@ -1,9 +1,13 @@
+import { getViewerProfileState } from './viewerProfile'
 // Inviting a mate: free share links only (no APIs, no keys).
 
 export const inviteText = 'Join me on Count Me In: find a crew for runs, dives, rides and more near you.'
 
+// Your personal link: people who sign up with it count for the invite challenge.
 export function getInviteUrl() {
-  return window.location.origin
+  const state = getViewerProfileState()
+  const id = state.status === 'ready' ? state.profile?.id : null
+  return id ? `${window.location.origin}/?ref=${id}` : window.location.origin
 }
 
 // Opens WhatsApp (app or web) with the message filled in.

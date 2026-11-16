@@ -1,4 +1,5 @@
 import { SuburbInput } from '../components/SuburbInput'
+import { claimStoredReferral } from '../lib/referrals'
 import { markOnboardingComplete, takeReturnPath } from '../lib/authGate'
 import { Bell, CalendarDays, Camera, Check, LocateFixed, QrCode, ShieldCheck, Trophy } from 'lucide-react'
 import { useEffect, useMemo, useRef, useState, type ChangeEvent } from 'react'
@@ -312,6 +313,7 @@ export function OnboardingScreen() {
       })
       setProfileSaved(true)
       clearDraft(userData.user.id)
+      void claimStoredReferral()
       if (skipRest) finish()
       else goTo(steps.indexOf('notifications'))
     } catch (saveError) {

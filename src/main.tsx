@@ -1,3 +1,7 @@
+import { captureReferrer } from './lib/referrals'
+
+// Remember who sent the invite link before anything redirects.
+captureReferrer()
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App'

@@ -36,6 +36,7 @@ Alle bestanden zijn veilig om opnieuw te draaien. Weet je niet zeker of je er ee
 | 28 | `supabase/migrations/20261114140000_premium_and_partners.sql` | Premium-schakelaar (nu alleen admin/moderator) en partnerbanners voor sponsors (Concept/Live) |
 | 29 | `supabase/migrations/20261116100000_checkin_window_and_reminders.sql` | Check-in kan tot 24 uur na de start; herinnering 1 uur voor de start (draait elke 5 minuten) |
 | 30 | `supabase/migrations/20261116120000_admin_manage_sports.sql` | Admin kan in de app het icoon van een sport wijzigen en een ongebruikte sport verwijderen (toevoegen kan al) |
+| 31 | `supabase/migrations/20261116140000_referral_challenge.sql` | Uitnodig-challenge: 4 vrienden aangemeld via jouw link = 1 jaar gratis Pro |
 
 ## Zo doe je het (per bestand)
 
@@ -71,3 +72,4 @@ Alle bestanden zijn veilig om opnieuw te draaien. Weet je niet zeker of je er ee
 - **Na 28:** nog niets te zien; de partner-slider volgt.
 - **Na 29:** je krijgt onderaan **Success**. Geeft hij een fout over `pg_cron`? Ga dan naar **Database** > **Extensions**, zoek **pg_cron**, zet hem aan en draai 29 opnieuw.
 - **Na 30:** ga als admin naar **More** > **Moderation** > **Sports**, voeg **Fishing** toe en wijzig daarna het icoon. Je krijgt geen foutmelding.
+- **Na 31:** open **Invite a mate**. Bovenaan staat "Invite 4 mates, get a year of Pro free" met 0 of 4.

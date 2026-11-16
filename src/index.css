@@ -6064,3 +6064,14 @@ textarea:focus::placeholder { color: transparent; }
 .partner-admin-item { padding-bottom: 16px; border-bottom: 1px solid var(--border); }
 .partner-form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 .partner-form select { width: 100%; min-height: 48px; padding: 0 12px; border: 1px solid var(--border); border-radius: var(--radius-lg); background: var(--surface-1); color: var(--text-primary); font-size: 16px; }
+
+/* Invite challenge in the Invite a mate panel. */
+.invite-challenge {
+  display: grid; gap: 6px; padding: 14px 16px; margin-bottom: 4px;
+  border: 1px solid var(--accent); border-radius: var(--radius-lg); background: var(--accent-subtle);
+}
+.invite-challenge strong { font: 700 20px/1.1 var(--font-display); }
+.invite-challenge span { color: var(--text-secondary); font-size: 14px; line-height: 20px; }
+.invite-challenge-dots { display: flex; gap: 6px; margin-top: 4px; }
+.invite-challenge-dots span { width: 28px; height: 8px; border-radius: 999px; background: var(--surface-3); }
+.invite-challenge-dots span.done { background: var(--accent); }

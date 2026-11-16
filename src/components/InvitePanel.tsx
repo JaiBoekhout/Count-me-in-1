@@ -1,5 +1,6 @@
 import { Check, Link2, MessageCircle, MessagesSquare, Share2 } from 'lucide-react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { getReferralProgress, referralGoal, type ReferralProgress } from '../lib/referrals'
 import {
   canUseShareSheet,
   copyInvite,
@@ -14,6 +15,13 @@ import { SidePanel } from './SidePanel'
 export function InvitePanel({ onClose }: { onClose: () => void }) {
   const [copied, setCopied] = useState(false)
   const [error, setError] = useState('')
+  const [progress, setProgress] = useState<ReferralProgress | null>(null)
+
+  useEffect(() => {
+    let active = true
+    void getReferralProgress().then((result) => { if (active) setProgress(result) })
+    return () => { active = false }
+  }, [])
 
   async function copy() {
     try {
@@ -27,7 +35,27 @@ export function InvitePanel({ onClose }: { onClose: () => void }) {
 
   return (
     <SidePanel title="Invite a mate" onClose={onClose}>
-      <p className="invite-intro">Send him a link to Count Me In.</p>
+      <p className="invite-intro">Send him your personal link to Count Me In.</p>
+      {progress && (
+        <div className="invite-challenge">
+          {progress.proUntil ? (
+            <>
+              <strong>You unlocked a year of Pro</strong>
+              <span>Free until {new Date(progress.proUntil).toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' })}. Thanks for growing the crew.</span>
+            </>
+          ) : (
+            <>
+              <strong>Invite {referralGoal} mates, get a year of Pro free</strong>
+              <span>{Math.min(progress.mates, referralGoal)} of {referralGoal} joined. A mate counts once he confirmed his email and finished his profile.</span>
+              <span className="invite-challenge-dots" aria-hidden="true">
+                {Array.from({ length: referralGoal }, (_, index) => (
+                  <span key={index} className={index < progress.mates ? 'done' : ''} />
+                ))}
+              </span>
+            </>
+          )}
+        </div>
+      )}
       <div className="invite-options">
         <a className="invite-option" href={getWhatsAppUrl()} target="_blank" rel="noreferrer">
           <span className="invite-option-icon"><MessageCircle aria-hidden="true" /></span>
