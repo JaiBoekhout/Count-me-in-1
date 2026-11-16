@@ -24,7 +24,7 @@ Werk van boven naar beneden. Vink af met `[x]` als iets klaar is.
 - [x] 🤖 **Veiligheidstips**: kort scherm bij je eerste activiteit en een vaste plek in Help. Bijv. spreek af op een openbare plek, laat iemand weten waar je bent, vertrouw je gevoel, bel 000 bij nood.
 - [x] 🤖 **Report en Block in de chat**: vanuit een groepschat een lid of bericht melden of blokkeren (nu alleen via een profiel).
 - [ ] 🧑 **Moderators vinden**: 1 of 2 vertrouwde mensen die je in Moderation > Team moderator maakt.
-- [ ] 🤝 **Beslissen over Open activities**: blijven ze op goedkeuring wachten (dan moet er dagelijks iemand kijken) of gaan ze direct live en kan je ze achteraf verwijderen?
+- [x] 🤝 **Beslissen over Open activities** (16 nov: ze blijven op goedkeuring wachten tot we er een aantal hebben gezien; daarna opnieuw bekijken): blijven ze op goedkeuring wachten (dan moet er dagelijks iemand kijken) of gaan ze direct live en kan je ze achteraf verwijderen?
 
 ## 3. Betrouwbaarheid
 

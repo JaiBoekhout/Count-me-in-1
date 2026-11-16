@@ -1,3 +1,4 @@
+import { InsightsScreen } from "./screens/InsightsScreen"
 import { CrewsScreen } from "./screens/CrewsScreen"
 import { ProMembersScreen } from "./screens/ProMembersScreen"
 import { LegalScreen } from "./screens/LegalScreen"
@@ -293,6 +294,7 @@ const router = createBrowserRouter([
       { path: "/more/moderation/sports", element: <SportsAdminScreen /> },
       { path: "/more/moderation/partners", element: <PartnersAdminScreen /> },
       { path: "/more/moderation/pro", element: <ProMembersScreen /> },
+      { path: "/more/moderation/insights", element: <InsightsScreen /> },
       { path: "/more/explore-sports", element: <ExploreSportsScreen /> },
       { path: "/profile/year", element: <YearInReviewScreen /> },
       { path: "/more/alerts", element: <SmartAlertsScreen /> },

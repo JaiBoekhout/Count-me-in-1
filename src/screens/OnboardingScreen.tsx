@@ -25,11 +25,12 @@ import { loadLocalities } from '../lib/localities'
 
 const availabilityOptions = ['Weekday mornings', 'Weekday evenings', 'Saturdays', 'Sundays', 'Flexible']
 const skillOptions: SkillLevel[] = ['Beginner', 'Intermediate', 'Experienced']
+const heardFromOptions = ['A mate told me', 'Instagram', 'Facebook', 'TikTok', 'Google', 'Club, gym or shop', 'Flyer or poster', 'Event', 'Other']
 
 // One question per screen. Name, date of birth and suburb are required; the
 // rest can be skipped and filled in later from the profile.
-type Step = 'name' | 'birthday' | 'suburb' | 'sports' | 'levels' | 'availability' | 'notifications' | 'location' | 'patches' | 'record'
-const steps: Step[] = ['name', 'birthday', 'suburb', 'sports', 'levels', 'availability', 'notifications', 'location', 'patches', 'record']
+type Step = 'name' | 'birthday' | 'suburb' | 'sports' | 'levels' | 'source' | 'availability' | 'notifications' | 'location' | 'patches' | 'record'
+const steps: Step[] = ['name', 'birthday', 'suburb', 'sports', 'levels', 'source', 'availability', 'notifications', 'location', 'patches', 'record']
 
 // Answers are kept on this device while you go, so closing the app or browser
 // halfway does not lose them: you continue at the step where you left off.
@@ -42,6 +43,7 @@ type Draft = {
   selectedSports: string[]
   sportSkills: Record<string, SkillLevel>
   selectedAvailability: string[]
+  heardFrom?: string
   photoDataUrl: string | null
 }
 const draftKey = (userId: string) => `count-me-in-onboarding-draft-v1:${userId}`
@@ -98,6 +100,7 @@ export function OnboardingScreen() {
   const [selectedSports, setSelectedSports] = useState<string[]>([])
   const [sportSkills, setSportSkills] = useState<Record<string, SkillLevel>>({})
   const [selectedAvailability, setSelectedAvailability] = useState<string[]>([])
+  const [heardFrom, setHeardFrom] = useState('')
   const [photoPreview, setPhotoPreview] = useState<string | null>(null)
   const [photoFile, setPhotoFile] = useState<File | null>(null)
   const [photoToCrop, setPhotoToCrop] = useState<File | null>(null)
@@ -157,6 +160,7 @@ export function OnboardingScreen() {
         setSelectedSports(draft.selectedSports ?? [])
         setSportSkills(draft.sportSkills ?? {})
         setSelectedAvailability(draft.selectedAvailability ?? [])
+        setHeardFrom(draft.heardFrom ?? '')
         setStepIndex(Math.max(0, Math.min(steps.indexOf('availability'), draft.stepIndex ?? 0)))
         if (draft.photoDataUrl) {
           try {
@@ -194,9 +198,10 @@ export function OnboardingScreen() {
       selectedSports,
       sportSkills,
       selectedAvailability,
+      heardFrom,
       photoDataUrl,
     })
-  }, [userId, profileSaved, stepIndex, firstName, bio, dateOfBirth, suburb, selectedSports, sportSkills, selectedAvailability, photoDataUrl])
+  }, [userId, profileSaved, stepIndex, firstName, bio, dateOfBirth, suburb, selectedSports, sportSkills, selectedAvailability, heardFrom, photoDataUrl])
 
   if (isChecking || checkError) {
     return (
@@ -313,6 +318,10 @@ export function OnboardingScreen() {
       })
       setProfileSaved(true)
       clearDraft(userData.user.id)
+      // For marketing: how did you find us? Separate, so saving never fails on it.
+      if (heardFrom) {
+        void Promise.resolve(supabase.from('profiles').update({ heard_from: heardFrom.slice(0, 80) }).eq('id', userData.user.id)).catch(() => undefined)
+      }
       void claimStoredReferral()
       if (skipRest) finish()
       else goTo(steps.indexOf('notifications'))
@@ -479,6 +488,50 @@ export function OnboardingScreen() {
             </div>
           </div>
         ))}
+      </FlowLayout>
+    )
+  }
+
+  if (step === 'source') {
+    const isOther = heardFrom.startsWith('Other')
+    return (
+      <FlowLayout
+        progress={progress}
+        align="start"
+        title={<>How did you <em>find us</em>?</>}
+        subtitle="Helps us reach more blokes like you."
+        onBack={onBack}
+        onSkip={() => goTo(nextIndexAfter(stepIndex))}
+        primaryLabel="Continue"
+        onPrimary={() => goTo(nextIndexAfter(stepIndex))}
+      >
+        <div className="choice-chips">
+          {heardFromOptions.map((option) => {
+            const selected = option === 'Other' ? isOther : heardFrom === option
+            return (
+              <button
+                key={option}
+                type="button"
+                className={`choice-chip ${selected ? 'selected' : ''}`}
+                aria-pressed={selected}
+                onClick={() => setHeardFrom(option)}
+              >
+                {option}
+              </button>
+            )
+          })}
+        </div>
+        {isOther && (
+          <label className="edit-field">
+            <span>Where? (optional)</span>
+            <input
+              value={heardFrom.replace(/^Other:? ?/, '')}
+              maxLength={60}
+              onChange={(event) => setHeardFrom(event.target.value ? `Other: ${event.target.value}` : 'Other')}
+              placeholder="For example, a podcast"
+            />
+          </label>
+        )}
       </FlowLayout>
     )
   }

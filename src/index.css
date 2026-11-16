@@ -6196,3 +6196,7 @@ select:focus { outline-color: var(--seafoam); }
 .message-input .message-attach { display: grid; place-items: center; flex: 0 0 auto; width: 32px; height: 32px; margin-right: 6px; border: 0; border-radius: var(--radius-md); background: var(--seafoam-subtle); color: var(--seafoam); }
 .message-input input { flex: 1; min-width: 0; }
 .section-heading-actions { display: inline-flex; align-items: center; gap: 16px; }
+.insight-row { gap: 12px; }
+.insight-row > span:first-child { flex: 0 0 40%; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.insight-bar { flex: 1; height: 8px; border-radius: 999px; background: var(--surface-3); overflow: hidden; }
+.insight-bar span { display: block; height: 100%; background: var(--accent); }
