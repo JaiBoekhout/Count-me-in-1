@@ -24,7 +24,7 @@ const notificationOptions: Array<{ key: keyof NotificationPreferences; label: st
   { key: 'friendRequests', label: 'Friend requests' },
   { key: 'activityInMySports', label: 'New activities in my sports', soon: true },
   { key: 'activityReminderDayBefore', label: 'Activity reminder · day before', soon: true },
-  { key: 'activityReminderOneHourBefore', label: 'Activity reminder · 1 hour before', soon: true },
+  { key: 'activityReminderOneHourBefore', label: 'Activity reminder · 1 hour before' },
 ]
 
 const pushStateText: Record<PushState, string> = {

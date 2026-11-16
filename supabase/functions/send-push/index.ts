@@ -20,6 +20,7 @@ type Preferences = {
   join_requests: boolean
   activity_updates: boolean
   friend_requests: boolean
+  reminder_hour_before: boolean
 }
 type PreferenceKey = keyof Preferences
 type Push = { title: string; body: string; url: string }
@@ -68,6 +69,7 @@ const notificationTitles: Record<string, string> = {
   invite_declined: 'Invitation declined',
   activity_cancelled: 'Activity cancelled',
   activity_updated: 'Activity updated',
+  activity_reminder: 'Starting in 1 hour',
   pr_confirmed: 'PR confirmed',
   pr_flagged: 'PR flagged',
   pr_verified: 'PR verified',
@@ -96,6 +98,7 @@ function urlFor(record: { type: string; activity_id?: string | null; actor_id?: 
 // Types not listed here (moderation, roles) are always sent.
 function preferenceFor(type: string): PreferenceKey | null {
   if (type === 'friend_request' || type === 'friend_accepted') return 'friend_requests'
+  if (type === 'activity_reminder') return 'reminder_hour_before'
   if (['participant_left', 'invite', 'invite_accepted', 'invite_declined', 'activity_cancelled',
     'pr_confirmed', 'pr_flagged', 'pr_verified', 'activity_approved', 'activity_rejected',
     'removed_from_activity', 'activity_updated'].includes(type)) {
