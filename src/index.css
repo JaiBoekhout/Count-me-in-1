@@ -5988,3 +5988,6 @@ textarea:focus::placeholder { color: transparent; }
 .app-gate-logo { width: 72px; height: 72px; border-radius: 18px; animation: gate-pulse 1.4s ease-in-out infinite; }
 @keyframes gate-pulse { 50% { opacity: 0.55; } }
 @media (prefers-reduced-motion: reduce) { .app-gate-logo { animation: none; } }
+
+/* Log in: no slides, so email, password and the button stay above the keyboard. */
+.auth-login-slogan { margin: 4px 0 20px; color: var(--text-secondary); font: 600 22px/1.2 var(--font-display); text-transform: uppercase; letter-spacing: 0.5px; }
