@@ -1,3 +1,5 @@
+import { SportIcon } from '../components/SportIcon'
+import { useSportCatalog } from '../lib/useSportCatalog'
 import { Suspense, lazy, useEffect, useMemo, useRef, useState } from 'react'
 import { supabase } from '../lib/supabase'
 import { Bell, Bike, CalendarDays, Check, ChevronDown, ChevronLeft, ChevronRight, Dumbbell, Fish, Footprints, ListFilter, MapPin, Mountain, Waves } from 'lucide-react'
@@ -127,7 +129,14 @@ export function HomeScreen() {
   const [isFeedLoading, setIsFeedLoading] = useState(cachedFeed === null)
   const [activityLoadError, setActivityLoadError] = useState('')
   const [filterScroll, setFilterScroll] = useState({ isScrollable: false, canScrollLeft: false, canScrollRight: false, activeDot: 0, dotCount: 0 })
-  const filterOptions = useMemo(() => ['My sports', ...new Set(userSportNames)], [userSportNames])
+  // "Show all", "My sports", your own sports, plus a sport picked with the filter button.
+  const [extraSport, setExtraSport] = useState<string | null>(null)
+  const [sportPickerOpen, setSportPickerOpen] = useState(false)
+  const sportCatalog = useSportCatalog()
+  const filterOptions = useMemo(
+    () => [...new Set(['Show all', 'My sports', ...(extraSport ? [extraSport] : []), ...userSportNames])],
+    [userSportNames, extraSport],
+  )
 
   // The tour runs once per device for signed-in members.
   useEffect(() => {
@@ -217,14 +226,19 @@ export function HomeScreen() {
   // Sport filter, then the chosen distance (also for your own activities; they are
   // always under My activities). Places we cannot locate stay visible.
   const visible = useMemo(() => {
-    const bySport = filter === 'My sports' ? allActivities : allActivities.filter((item) => item.sport === filter)
+    const bySport = filter === 'Show all'
+      ? allActivities
+      : filter === 'My sports'
+        // Your sports, plus anything you host or joined (whatever the sport).
+        ? allActivities.filter((item) => userSportNames.includes(item.sport) || item.viewerIsHost || item.joinStatus)
+        : allActivities.filter((item) => item.sport === filter)
     return bySport.filter((item) => isWithinRadius(
       locationPreference,
       item.latitude != null && item.longitude != null
         ? { latitude: item.latitude, longitude: item.longitude }
         : suburbCoordinates(item.suburb),
     ))
-  }, [allActivities, filter, locationPreference])
+  }, [allActivities, filter, locationPreference, userSportNames])
 
   useEffect(() => {
     const intervalId = window.setInterval(() => setNow(new Date()), 60_000)
@@ -390,6 +404,11 @@ export function HomeScreen() {
             {item}
           </button>
           ))}
+          {!isViewerLoading && (
+            <button type="button" className="chip chip-icon" aria-label="Filter by another sport" onClick={() => setSportPickerOpen(true)}>
+              <ListFilter aria-hidden="true" /> Other sports
+            </button>
+          )}
         </div>
       </div>
       {sportLoadError && <p className="inline-error" role="alert">{sportLoadError}</p>}
@@ -401,7 +420,38 @@ export function HomeScreen() {
         </div>
       )}
 
-      <PartnerSlider sports={filter === 'My sports' ? null : [filter]} />
+      {sportPickerOpen && (
+        <SidePanel title="Show a sport" onClose={() => setSportPickerOpen(false)}>
+          <div className="more-setting-list">
+            {[...new Set([...sportCatalog, ...allActivities.map((item) => item.sport)])]
+              .sort((left, right) => left.localeCompare(right))
+              .map((sport) => {
+                const count = allActivities.filter((item) => item.sport === sport).length
+                return (
+                  <button
+                    type="button"
+                    key={sport}
+                    className="more-choice-row explore-sport-row"
+                    onClick={() => {
+                      if (!userSportNames.includes(sport)) setExtraSport(sport)
+                      setFilter(sport)
+                      setSportPickerOpen(false)
+                    }}
+                  >
+                    <span className="explore-sport-icon"><SportIcon sport={sport} /></span>
+                    <span className="grow">
+                      <strong>{sport}</strong>
+                      <small>{count > 0 ? `${count} coming up` : 'Nothing on yet'}</small>
+                    </span>
+                    {filter === sport && <Check aria-hidden="true" />}
+                  </button>
+                )
+              })}
+          </div>
+        </SidePanel>
+      )}
+
+      <PartnerSlider sports={filter === 'My sports' || filter === 'Show all' ? null : [filter]} />
 
       <div className="view-toggle" aria-label="Select view mode" data-tour="home-views">
         <button className={view === 'list' ? 'selected' : ''} onClick={() => setView('list')} type="button" aria-pressed={view === 'list'}>

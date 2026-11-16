@@ -6190,3 +6190,5 @@ select:focus { outline-color: var(--seafoam); }
 .crew-card-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
 .crew-card-head h3 { font-size: 22px; }
 .crew-visibility { display: grid; gap: 8px; margin-bottom: 16px; }
+.chip.chip-icon { display: inline-flex; align-items: center; gap: 6px; color: var(--seafoam); }
+.chip.chip-icon svg { width: 16px; height: 16px; }
