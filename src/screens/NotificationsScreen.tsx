@@ -65,6 +65,7 @@ const titles = {
   activity_updated: 'Activity updated',
   activity_reminder: 'Starting in 1 hour',
   activity_alert: 'New activity for you',
+  crew_invite: 'Crew invite',
   pr_confirmed: 'PR confirmed',
   pr_flagged: 'PR flagged',
   pr_verified: 'PR verified',
@@ -118,7 +119,9 @@ export function NotificationsScreen() {
           title: item.type === 'participant_left' && item.actorName ? `${item.actorName} can’t make it` : item.type === 'staff_message_reply' && item.actorName ? `${item.actorName} replied` : titles[item.type],
           message: item.message ? `${item.body} “${item.message}”` : item.body,
           time: formatRelativeTime(item.createdAt),
-          href: item.type === 'staff_message' || item.type === 'staff_message_revoked'
+          href: item.type === 'crew_invite'
+            ? '/more/crews'
+            : item.type === 'staff_message' || item.type === 'staff_message_revoked'
             ? '/chats'
             : item.type === 'staff_message_reply' && item.actorId
             ? `/more/moderation/members/${item.actorId}/message`

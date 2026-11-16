@@ -11,31 +11,31 @@ Werk van boven naar beneden. Vink af met `[x]` als iets klaar is.
 
 - [x] 🤝 **Eigen mailprovider (SMTP) instellen** (13 nov). Gratis via Gmail (`count.me.in.aus@gmail.com`, App password), max. ca. 500 mails per dag. Supabase: custom SMTP aan, 100 mails per uur, Site URL en Redirect URLs op `count-me-in-nine.vercel.app`.
   - [ ] 🧑 Testen: aanmelden met een nieuw e-mailadres, mail komt aan, link brengt je terug naar de app.
-- [ ] 🤖 **Account verwijderen.** Knop in More > Privacy and safety. Verwijdert profiel, foto's, PR's, berichten en aanmeldingen, met een bevestigingsstap.
-- [ ] 🤖 **Privacy policy** (eerste versie): wat we bewaren (naam, foto, geboortedatum, suburb, locatie bij delen), waarom, hoe lang, en hoe je het laat verwijderen.
-- [ ] 🤖 **Terms of use** (eerste versie).
-- [ ] 🤖 **Community guidelines**: respect, geen haat, geen verkoop/spam, veilig afspreken.
+- [x] 🤖 **Account verwijderen.** Knop in More > Privacy and safety. Verwijdert profiel, foto's, PR's, berichten en aanmeldingen, met een bevestigingsstap.
+- [x] 🤖 **Privacy policy** (eerste versie): wat we bewaren (naam, foto, geboortedatum, suburb, locatie bij delen), waarom, hoe lang, en hoe je het laat verwijderen.
+- [x] 🤖 **Terms of use** (eerste versie).
+- [x] 🤖 **Community guidelines**: respect, geen haat, geen verkoop/spam, veilig afspreken.
 - [ ] 🧑 **Teksten laten nalezen** door iemand met juridische kennis (bijv. gratis juridisch spreekuur).
-- [ ] 🤖 **Links naar deze pagina's** bij het aanmelden ("By continuing you agree to…") en in More > About.
-- [ ] 🤖 **Verificatie eerlijk maken.** Telefoon- en selfiecheck zijn nagebootst. Haal teksten en vinkjes weg die suggereren dat leden gecontroleerd zijn, tot dat echt zo is.
+- [x] 🤖 **Links naar deze pagina's** bij het aanmelden ("By continuing you agree to…") en in More > About.
+- [x] 🤖 **Verificatie eerlijk maken.** Telefoon- en selfiecheck zijn nagebootst. Haal teksten en vinkjes weg die suggereren dat leden gecontroleerd zijn, tot dat echt zo is.
 
 ## 2. Veiligheid
 
-- [ ] 🤖 **Veiligheidstips**: kort scherm bij je eerste activiteit en een vaste plek in Help. Bijv. spreek af op een openbare plek, laat iemand weten waar je bent, vertrouw je gevoel, bel 000 bij nood.
-- [ ] 🤖 **Report en Block in de chat**: vanuit een groepschat een lid of bericht melden of blokkeren (nu alleen via een profiel).
+- [x] 🤖 **Veiligheidstips**: kort scherm bij je eerste activiteit en een vaste plek in Help. Bijv. spreek af op een openbare plek, laat iemand weten waar je bent, vertrouw je gevoel, bel 000 bij nood.
+- [x] 🤖 **Report en Block in de chat**: vanuit een groepschat een lid of bericht melden of blokkeren (nu alleen via een profiel).
 - [ ] 🧑 **Moderators vinden**: 1 of 2 vertrouwde mensen die je in Moderation > Team moderator maakt.
-- [ ] 🤝 **Beslissen over Open activities**: blijven ze op goedkeuring wachten (dan moet er dagelijks iemand kijken) of gaan ze direct live en kan je ze achteraf verwijderen?
+- [x] 🤝 **Beslissen over Open activities** (16 nov: ze blijven op goedkeuring wachten tot we er een aantal hebben gezien; daarna opnieuw bekijken): blijven ze op goedkeuring wachten (dan moet er dagelijks iemand kijken) of gaan ze direct live en kan je ze achteraf verwijderen?
 
 ## 3. Betrouwbaarheid
 
 - [ ] 🤖 **Foutmeldingen bijhouden** met Sentry (gratis plan). Je krijgt een mail als de app bij iemand vastloopt.
-- [ ] 🤖 **Back-up maken**: het gratis plan van Supabase heeft geen automatische back-ups. Claude maakt een stappenplan om zelf een export te maken (bijv. eens per week).
+- [x] 🤖 **Back-up maken** (zie `docs/backup-stappenplan.md`): het gratis plan van Supabase heeft geen automatische back-ups. Claude maakt een stappenplan om zelf een export te maken (bijv. eens per week).
 - [ ] 🧑 **Supabase wakker houden tijdens stille periodes**: een gratis project pauzeert na 7 dagen zonder gebruik. Open de app minstens eens per week tot er vaste gebruikers zijn.
 - [ ] 🤖 **Alle flows nalopen op fouten**, met duidelijke foutmeldingen en lege staten (fase 6).
 
 ## 4. Testen met echte mensen (fase 6)
 
-- [ ] 🤖 **Testchecklist voor op je telefoon**: aanmelden, profiel, activiteit maken, meedoen, chat, QR-check-in, patches, PR, vriendschapsverzoek, pushmelding, account verwijderen.
+- [x] 🤖 **Testchecklist voor op je telefoon** (zie `docs/testchecklist.md`): aanmelden, profiel, activiteit maken, meedoen, chat, QR-check-in, patches, PR, vriendschapsverzoek, pushmelding, account verwijderen.
 - [ ] 🧑 **5 tot 10 vrienden uitnodigen** om de app een week of twee te gebruiken.
 - [ ] 🤝 **Feedback verzamelen en verwerken** in een nieuwe takenlijst.
 
@@ -49,5 +49,5 @@ Werk van boven naar beneden. Vink af met `[x]` als iets klaar is.
 ## Later (na de start)
 
 - [ ] 🧑 **Eigen domeinnaam** (bijv. `countmein.com.au`, ca. AUD 15–30 per jaar), daarna mail via Resend/Brevo vanaf dat domein en de domeinnaam koppelen aan Vercel. Pas nodig als de app groeit of Gmail te klein wordt.
-- [ ] 🤖 Herinneringen een dag en een uur voor een activiteit (pushmelding).
+- [x] 🤖 Herinnering een uur voor een activiteit (pushmelding). Een dag van tevoren kan nog.
 - [ ] 🤝 Echte verificatie (telefoon of selfie). Kost geld per controle, dus pas als de app groeit. Claude zet eerst de opties en kosten op een rij.

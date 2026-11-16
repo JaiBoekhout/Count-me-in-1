@@ -42,6 +42,9 @@ Alle bestanden zijn veilig om opnieuw te draaien. Weet je niet zeker of je er ee
 | 34 | `supabase/migrations/20261116170000_profile_extras.sql` | Pro: omslagfoto en favoriete spots op je profiel |
 | 35 | `supabase/migrations/20261116180000_stories.sql` | Pro: Stories (verhalen met foto), te melden en te verbergen door het team |
 | 36 | `supabase/migrations/20261116190000_delete_account.sql` | Leden kunnen hun account zelf verwijderen (More > Privacy and safety) |
+| 37 | `supabase/migrations/20261116200000_admin_pro_members.sql` | Admin geeft leden Pro (met einddatum), ziet wie Pro heeft en kan het beëindigen |
+| 38 | `supabase/migrations/20261116210000_private_crews.sql` | Pro: privé-crews; activiteiten die alleen je crew ziet |
+| 39 | `supabase/migrations/20261116220000_signup_source.sql` | "How did you find us?" in de onboarding en het admin-overzicht Insights |
 
 ## Zo doe je het (per bestand)
 
@@ -80,3 +83,6 @@ Alle bestanden zijn veilig om opnieuw te draaien. Weet je niet zeker of je er ee
 - **Na 31:** open **Invite a mate**. Bovenaan staat "Invite 4 mates, get a year of Pro free" met 0 of 4.
 - **Na 32:** je krijgt onderaan **Success**. Op je eigen profiel staat de Supporter-badge (zichtbaar voor het team zolang Pro alleen voor het team is).
 - **Na 33:** ga als admin naar **More** > **Smart alerts**, maak een alert aan en sla op. Je krijgt geen foutmelding.
+- **Na 37:** ga naar **Moderation** > **Pro members**, zoek een lid, kies **1 month** en klik op **Give Pro**. Hij staat onder **Has Pro now**.
+- **Na 38:** ga naar **Pro** > **Crews**, maak een crew en nodig een vriend uit. Bij **Create activity** staat bij **Add people** de keuze **Only [crew]**.
+- **Na 39:** ga naar **Moderation** > **Insights**. Je ziet het aantal leden en "How they found us".

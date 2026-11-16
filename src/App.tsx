@@ -1,3 +1,7 @@
+import { InsightsScreen } from "./screens/InsightsScreen"
+import { CrewsScreen } from "./screens/CrewsScreen"
+import { ProMembersScreen } from "./screens/ProMembersScreen"
+import { LegalScreen } from "./screens/LegalScreen"
 import { StoriesScreen } from "./screens/StoriesScreen"
 import { ProfileStyleScreen } from "./screens/ProfileStyleScreen"
 import { SmartAlertsScreen } from "./screens/SmartAlertsScreen"
@@ -61,7 +65,7 @@ import { getOpenStaffMessageCount } from "./lib/staffMessages"
 import { ModerationScreen } from "./screens/ModerationScreen"
 
 // Pages you can open without being signed in.
-const publicPaths = ["/welcome", "/login", "/reset-password"]
+const publicPaths = ["/welcome", "/login", "/reset-password", "/privacy", "/terms", "/guidelines"]
 const sideNavCollapsedKey = "count-me-in-side-nav-collapsed"
 
 // Read before Supabase handles the link: a password reset link (or its error,
@@ -220,7 +224,7 @@ function AppShell() {
         <Outlet />
       </div>
       )}
-      {showNav && !blocked && (
+      {showNav && !blocked && gate !== 'signedOut' && (
         <BottomNav
           active={activeTab}
           hasUnreadChats={hasUnreadChats}
@@ -279,6 +283,9 @@ const router = createBrowserRouter([
       { path: "/more/language", element: <LanguageSettingsScreen /> },
       { path: "/more/location", element: <LocationSettingsScreen /> },
       { path: "/more/about", element: <MoreAboutScreen /> },
+      { path: "/privacy", element: <LegalScreen page="privacy" /> },
+      { path: "/terms", element: <LegalScreen page="terms" /> },
+      { path: "/guidelines", element: <LegalScreen page="guidelines" /> },
       { path: "/more/help", element: <MoreHelpScreen /> },
       { path: "/more/moderation", element: <ModerationScreen /> },
       { path: "/more/moderation/records", element: <ModerationScreen tab="records" /> },
@@ -286,11 +293,14 @@ const router = createBrowserRouter([
       { path: "/more/moderation/team", element: <TeamScreen /> },
       { path: "/more/moderation/sports", element: <SportsAdminScreen /> },
       { path: "/more/moderation/partners", element: <PartnersAdminScreen /> },
+      { path: "/more/moderation/pro", element: <ProMembersScreen /> },
+      { path: "/more/moderation/insights", element: <InsightsScreen /> },
       { path: "/more/explore-sports", element: <ExploreSportsScreen /> },
       { path: "/profile/year", element: <YearInReviewScreen /> },
       { path: "/more/alerts", element: <SmartAlertsScreen /> },
       { path: "/profile/style", element: <ProfileStyleScreen /> },
       { path: "/stories", element: <StoriesScreen /> },
+      { path: "/more/crews", element: <CrewsScreen /> },
       { path: "/more/moderation/members/:id/edit", element: <AdminEditProfileScreen /> },
       { path: "/more/moderation/members/:id/message", element: <SendStaffMessageScreen /> },
     ],

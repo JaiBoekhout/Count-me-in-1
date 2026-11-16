@@ -1,13 +1,16 @@
+import { SidePanel } from '../components/SidePanel'
+import { ActivityFilterPanel } from '../components/ActivityFilterPanel'
+import { activityLevels, applyActivityFilters, countActiveActivityFilters, defaultActivityFilters, type ActivityFilters } from '../lib/activityFilters'
+import { useSportCatalog } from '../lib/useSportCatalog'
 import { Suspense, lazy, useEffect, useMemo, useRef, useState } from 'react'
 import { supabase } from '../lib/supabase'
-import { Bell, Bike, CalendarDays, Check, ChevronDown, ChevronLeft, ChevronRight, Dumbbell, Fish, Footprints, ListFilter, MapPin, Mountain, Waves } from 'lucide-react'
+import { Bell, Bike, CalendarDays, Check, ChevronDown, ChevronLeft, ChevronRight, Dumbbell, Fish, Footprints, ListFilter, SlidersHorizontal, MapPin, Mountain, Waves } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { ActivityCard, type ActivityCardData } from '../components/ActivityCard'
 import { Button } from '../components/Button'
 import { activities, currentUser } from '../data/mockData'
 import { CrewSection } from '../components/CrewSection'
 import { LocationControls } from '../components/LocationControls'
-import { SidePanel } from '../components/SidePanel'
 import { applyHomeSuburbDefault, isWithinRadius, memberCoordinates, setLocationPreference, suburbCoordinates, useLocationPreference, type LocationPreference } from '../lib/distance'
 import {
   getSavedActivityFeed,
@@ -127,7 +130,16 @@ export function HomeScreen() {
   const [isFeedLoading, setIsFeedLoading] = useState(cachedFeed === null)
   const [activityLoadError, setActivityLoadError] = useState('')
   const [filterScroll, setFilterScroll] = useState({ isScrollable: false, canScrollLeft: false, canScrollRight: false, activeDot: 0, dotCount: 0 })
-  const filterOptions = useMemo(() => ['My sports', ...new Set(userSportNames)], [userSportNames])
+  // "Show all", "My sports", your own sports, plus a sport picked with the filter button.
+  // Slide-in filter panel (sports, when, level, spots, distance).
+  const [filtersOpen, setFiltersOpen] = useState(false)
+  const [activityFilters, setActivityFilters] = useState<ActivityFilters>(defaultActivityFilters)
+  const sportCatalog = useSportCatalog()
+  const activeFilterCount = countActiveActivityFilters(activityFilters, null)
+  const filterOptions = useMemo(
+    () => ['All sports', 'My sports'],
+    [],
+  )
 
   // The tour runs once per device for signed-in members.
   useEffect(() => {
@@ -217,14 +229,21 @@ export function HomeScreen() {
   // Sport filter, then the chosen distance (also for your own activities; they are
   // always under My activities). Places we cannot locate stay visible.
   const visible = useMemo(() => {
-    const bySport = filter === 'My sports' ? allActivities : allActivities.filter((item) => item.sport === filter)
-    return bySport.filter((item) => isWithinRadius(
+    const bySport = filter === 'All sports'
+      ? allActivities
+      : filter === 'My sports'
+        // Your sports, plus anything you host or joined (whatever the sport).
+        ? allActivities.filter((item) => userSportNames.includes(item.sport) || item.viewerIsHost || item.joinStatus)
+        : allActivities.filter((item) => item.sport === filter)
+    const nearby = bySport.filter((item) => isWithinRadius(
       locationPreference,
       item.latitude != null && item.longitude != null
         ? { latitude: item.latitude, longitude: item.longitude }
         : suburbCoordinates(item.suburb),
     ))
-  }, [allActivities, filter, locationPreference])
+    // Then the filters from the slide-in panel.
+    return applyActivityFilters(nearby, activityFilters, { location: locationPreference, viewerSports: userSportNames, query: '', now: new Date() })
+  }, [allActivities, filter, locationPreference, userSportNames, activityFilters])
 
   useEffect(() => {
     const intervalId = window.setInterval(() => setNow(new Date()), 60_000)
@@ -390,6 +409,12 @@ export function HomeScreen() {
             {item}
           </button>
           ))}
+          {!isViewerLoading && (
+            <button type="button" className="chip chip-icon" aria-label={`Filters${activeFilterCount ? `, ${activeFilterCount} on` : ''}`} onClick={() => setFiltersOpen(true)}>
+              <SlidersHorizontal aria-hidden="true" /> Filters
+              {activeFilterCount > 0 && <span className="chip-count">{activeFilterCount}</span>}
+            </button>
+          )}
         </div>
       </div>
       {sportLoadError && <p className="inline-error" role="alert">{sportLoadError}</p>}
@@ -401,7 +426,23 @@ export function HomeScreen() {
         </div>
       )}
 
-      <PartnerSlider sports={filter === 'My sports' ? null : [filter]} />
+      {filtersOpen && (
+        <ActivityFilterPanel
+          filters={activityFilters}
+          location={locationPreference}
+          sports={[...new Set([...sportCatalog, ...allActivities.map((item) => item.sport)])].sort((left, right) => left.localeCompare(right))}
+          levels={activityLevels}
+          countFor={(draft, draftLocation) => applyActivityFilters(allActivities, draft, { location: draftLocation, viewerSports: userSportNames, query: '', now: new Date() }).length}
+          onApply={(next, nextLocation) => {
+            setActivityFilters(next)
+            setLocationPreference(nextLocation)
+            setFiltersOpen(false)
+          }}
+          onClose={() => setFiltersOpen(false)}
+        />
+      )}
+
+      <PartnerSlider sports={activityFilters.sports.length ? activityFilters.sports : null} />
 
       <div className="view-toggle" aria-label="Select view mode" data-tour="home-views">
         <button className={view === 'list' ? 'selected' : ''} onClick={() => setView('list')} type="button" aria-pressed={view === 'list'}>

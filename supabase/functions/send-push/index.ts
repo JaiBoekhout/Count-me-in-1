@@ -71,6 +71,7 @@ const notificationTitles: Record<string, string> = {
   activity_updated: 'Activity updated',
   activity_reminder: 'Starting in 1 hour',
   activity_alert: 'New activity for you',
+  crew_invite: 'Crew invite',
   pr_confirmed: 'PR confirmed',
   pr_flagged: 'PR flagged',
   pr_verified: 'PR verified',
@@ -90,6 +91,7 @@ const notificationTitles: Record<string, string> = {
 // Where tapping the push opens the app, for types that are not about an activity.
 function urlFor(record: { type: string; activity_id?: string | null; actor_id?: string | null }) {
   if (record.activity_id) return `/activity/${record.activity_id}`
+  if (record.type === 'crew_invite') return '/more/crews'
   if (record.type === 'staff_message' || record.type === 'staff_message_revoked') return '/chats'
   if (record.type === 'staff_message_reply' && record.actor_id) return `/more/moderation/members/${record.actor_id}/message`
   return '/notifications'

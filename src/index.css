@@ -6160,3 +6160,44 @@ select:focus { outline-color: var(--seafoam); }
 .delete-account { display: grid; gap: 12px; margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--border); }
 .delete-account-confirm { display: grid; gap: 12px; padding: 16px; border: 1px solid var(--danger); border-radius: var(--radius-lg); background: var(--danger-subtle); }
 .delete-account-confirm p { color: var(--text-primary); line-height: 1.45; }
+
+/* Privacy policy, Terms, Community guidelines. */
+.legal-page { display: grid; gap: 18px; align-content: start; max-width: 760px; }
+.legal-intro { color: var(--text-primary); font-size: 17px; line-height: 1.5; }
+.legal-section { display: grid; gap: 8px; }
+.legal-section h2 { font-size: 22px; }
+.legal-section p { color: var(--text-secondary); line-height: 1.55; }
+.legal-links { display: flex; flex-wrap: wrap; gap: 8px 18px; margin: 8px 0 16px; }
+.legal-links button { border: 0; background: transparent; padding: 4px 0; color: var(--seafoam); font-size: 14px; text-decoration: underline; text-underline-offset: 3px; }
+.auth-legal { margin-top: 16px; color: var(--text-secondary); font-size: 13px; line-height: 1.5; }
+.auth-legal a { color: var(--seafoam); text-decoration: underline; text-underline-offset: 3px; }
+
+/* Safety tips (Help, and once before your first meetup). */
+.safety-tips { display: grid; gap: 12px; list-style: none; margin: 0; padding: 0; text-align: left; width: 100%; }
+.safety-tips li { display: flex; gap: 12px; align-items: flex-start; }
+.safety-tips strong { display: block; font-size: 15px; }
+.safety-tips small { display: block; color: var(--text-secondary); font-size: 13px; line-height: 1.4; }
+.safety-tip-icon { display: grid; place-items: center; width: 36px; height: 36px; flex: 0 0 auto; border-radius: var(--radius-md); background: var(--seafoam-subtle); color: var(--seafoam); }
+.safety-tip-icon svg { width: 18px; height: 18px; }
+.safety-card { gap: 14px; }
+.safety-card .button { width: 100%; }
+.help-safety { display: grid; gap: 12px; padding: 16px; border: 1px solid var(--border); border-radius: var(--radius-lg); background: var(--surface-1); }
+.help-safety h2 { font-size: 22px; }
+.pro-pick { width: 100%; border: 0; background: transparent; color: var(--text-primary); text-align: left; cursor: pointer; }
+
+/* Pro: crews. */
+.crew-card { display: grid; gap: 12px; padding: 16px; border: 1px solid var(--border); border-radius: var(--radius-lg); background: var(--surface-1); }
+.crew-card-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.crew-card-head h3 { font-size: 22px; }
+.crew-visibility { display: grid; gap: 8px; margin-bottom: 16px; }
+.chip.chip-icon { display: inline-flex; align-items: center; gap: 6px; color: var(--seafoam); }
+.chip.chip-icon svg { width: 16px; height: 16px; }
+/* Chat: share an activity from the message box. */
+.message-input .message-attach { display: grid; place-items: center; flex: 0 0 auto; width: 32px; height: 32px; margin-right: 6px; border: 0; border-radius: var(--radius-md); background: var(--seafoam-subtle); color: var(--seafoam); }
+.message-input input { flex: 1; min-width: 0; }
+.section-heading-actions { display: inline-flex; align-items: center; gap: 16px; }
+.insight-row { gap: 12px; }
+.insight-row > span:first-child { flex: 0 0 40%; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.insight-bar { flex: 1; height: 8px; border-radius: 999px; background: var(--surface-3); overflow: hidden; }
+.insight-bar span { display: block; height: 100%; background: var(--accent); }
+.chip-count { display: inline-grid; place-items: center; min-width: 18px; height: 18px; padding: 0 5px; border-radius: 999px; background: var(--accent); color: var(--on-accent); font-size: 11px; font-weight: 700; }

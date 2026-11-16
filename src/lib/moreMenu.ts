@@ -16,7 +16,7 @@ import {
   UserRound,
   UsersRound,
   UserRoundPen,
-  type LucideIcon, Telescope, Handshake, Sparkles, BellRing, ImagePlus, BookOpen } from 'lucide-react'
+  type LucideIcon, Telescope, Handshake, Sparkles, BellRing, ImagePlus, BookOpen, Crown, ChartColumn } from 'lucide-react'
 import { supabase } from './supabase'
 import { BrandMarkIcon } from '../components/BrandMark'
 
@@ -41,6 +41,7 @@ export const menuGroups: MenuGroup[] = [
       { label: 'My sports', href: '/more/sports', icon: Dumbbell },
       { label: 'Patches', href: '/profile/patches', icon: Award },
       { label: 'Personal records', href: '/profile/records', icon: Trophy },
+      { label: 'Friend requests', href: '/more/requests', icon: UserPlus },
     ],
   },
   {
@@ -49,7 +50,7 @@ export const menuGroups: MenuGroup[] = [
       { label: 'Find activities', href: '/more/activities', icon: Compass },
       { label: 'Explore sports', href: '/more/explore-sports', icon: Telescope },
       { label: 'Find new crew', href: '/more/crew', icon: Search },
-      { label: 'Friend requests', href: '/more/requests', icon: UserPlus },
+      { label: 'Crews', href: '/more/crews', icon: UsersRound },
     ],
   },
   {
@@ -96,7 +97,7 @@ export const moderationGroup: MenuGroup = {
 // Admins also see Team (making members moderator).
 export function getModerationGroup(isAdmin: boolean): MenuGroup {
   return isAdmin
-    ? { ...moderationGroup, items: [...moderationGroup.items, { label: 'Team', href: '/more/moderation/team', icon: UsersRound }, { label: 'Sports', href: '/more/moderation/sports', icon: Dumbbell }] }
+    ? { ...moderationGroup, items: [...moderationGroup.items, { label: 'Team', href: '/more/moderation/team', icon: UsersRound }, { label: 'Sports', href: '/more/moderation/sports', icon: Dumbbell }, { label: 'Pro members', href: '/more/moderation/pro', icon: Crown }, { label: 'Insights', href: '/more/moderation/insights', icon: ChartColumn }] }
     : moderationGroup
 }
 

@@ -46,6 +46,12 @@ export function MoreAboutScreen() {
         </button>
       </section>
 
+      <nav className="legal-links" aria-label="Legal">
+        <button type="button" onClick={() => navigate('/privacy')}>Privacy policy</button>
+        <button type="button" onClick={() => navigate('/terms')}>Terms of use</button>
+        <button type="button" onClick={() => navigate('/guidelines')}>Community guidelines</button>
+      </nav>
+
       <footer className="about-footer">
         <span>Version {packageDetails.version}</span>
         <span>Made in Adelaide</span>
