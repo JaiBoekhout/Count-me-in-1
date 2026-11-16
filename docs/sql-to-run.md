@@ -37,6 +37,7 @@ Alle bestanden zijn veilig om opnieuw te draaien. Weet je niet zeker of je er ee
 | 29 | `supabase/migrations/20261116100000_checkin_window_and_reminders.sql` | Check-in kan tot 24 uur na de start; herinnering 1 uur voor de start (draait elke 5 minuten) |
 | 30 | `supabase/migrations/20261116120000_admin_manage_sports.sql` | Admin kan in de app het icoon van een sport wijzigen en een ongebruikte sport verwijderen (toevoegen kan al) |
 | 31 | `supabase/migrations/20261116140000_referral_challenge.sql` | Uitnodig-challenge: 4 vrienden aangemeld via jouw link = 1 jaar gratis Pro |
+| 32 | `supabase/migrations/20261116150000_supporter_badge.sql` | Supporter-badge op profielen van leden met Pro |
 
 ## Zo doe je het (per bestand)
 
