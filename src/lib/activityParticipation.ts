@@ -142,16 +142,21 @@ export async function getSavedActivityFeed(): Promise<FeedActivity[]> {
   const { data: activityRows, error: activitiesError } = await client
     .from("activities")
     .select(
-      "id, host_id, sport_id, title, starts_at, meeting_point, suburb, spots_total, level_wanted, notes, sport_details, cover_image_url",
+      "id, host_id, sport_id, title, starts_at, duration_minutes, meeting_point, suburb, spots_total, level_wanted, notes, sport_details, cover_image_url",
     )
-    .gte("starts_at", new Date().toISOString())
+    // Also activities that started today: they stay on Home until they end.
+    .gte("starts_at", new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString())
     .order("starts_at", { ascending: true })
   if (activitiesError) throw activitiesError
+  const stillOn = (activityRows ?? []).filter((row) => {
+    const end = Date.parse(row.starts_at) + (Number(row.duration_minutes) || 120) * 60 * 1000
+    return end > Date.now()
+  })
 
   // Moderators and admins can also read activities waiting for review: keep
   // those out of the feed (your own stay visible to you). Separate query, so the
   // feed still works before the review_status column exists.
-  const rows = activityRows ?? []
+  const rows = stillOn
   const reviewResult = rows.length
     ? await client.from("activities").select("id, review_status").in("id", rows.map((row) => row.id))
     : { data: [], error: null }
