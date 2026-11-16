@@ -73,3 +73,5 @@ Alle bestanden zijn veilig om opnieuw te draaien. Weet je niet zeker of je er ee
 - **Na 27:** open de app twee keer na elkaar. Een patch-feestscherm dat je al gezien hebt, komt niet terug.
 - **Na 28:** nog niets te zien; de partner-slider volgt.
 - **Na 29:** je krijgt onderaan **Success**. Geeft hij een fout over `pg_cron`? Ga dan naar **Database** > **Extensions**, zoek **pg_cron**, zet hem aan en draai 29 opnieuw.
+- **Na 30:** ga als admin naar **More** > **Moderation** > **Sports**, voeg **Fishing** toe en wijzig daarna het icoon. Je krijgt geen foutmelding.
+- **Na 31:** open **Invite a mate**. Bovenaan staat "Invite 4 mates, get a year of Pro free" met 0 of 4.
