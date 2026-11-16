@@ -1,3 +1,6 @@
+import { ReportDialog } from "../components/ReportDialog"
+import { blockProfile } from "../lib/moderation"
+import { useViewerProfile } from "../lib/viewerProfile"
 import { ArrowLeft, Lock, MoreVertical, Send, UserMinus } from "lucide-react"
 import { ChatSkeleton } from '../components/Skeleton'
 import { ChatMessageBody } from '../components/ChatActivityCard'
@@ -35,6 +38,10 @@ export function ChatThreadScreen({ embedded = false }: { embedded?: boolean }) {
   // Chat menu (top right) and the warning pop-ups it opens.
   const [menuOpen, setMenuOpen] = useState(false)
   const [membersOpen, setMembersOpen] = useState(false)
+  // Report or block a member from the chat (Members list).
+  const [reportTarget, setReportTarget] = useState<{ id: string; name: string } | null>(null)
+  const viewer = useViewerProfile()
+  const viewerUserId = viewer.status === 'ready' ? viewer.profile?.id ?? null : null
   const [confirm, setConfirm] = useState<
     | { kind: "remove"; userId: string; name: string }
     | { kind: "close" }
@@ -325,6 +332,20 @@ export function ChatThreadScreen({ embedded = false }: { embedded?: boolean }) {
                       <strong>{name}</strong>
                       <small>{isHost ? "Host" : "Going"}</small>
                     </span>
+                    {memberId && memberId !== viewerUserId && (
+                      <span className="chat-member-actions">
+                        <button
+                          type="button"
+                          className="text-action"
+                          onClick={() => {
+                            setMembersOpen(false)
+                            setReportTarget({ id: memberId, name })
+                          }}
+                        >
+                          Report
+                        </button>
+                      </span>
+                    )}
                     {thread.viewerIsHost && !isHost && memberId && (
                       <button
                         type="button"
@@ -344,6 +365,18 @@ export function ChatThreadScreen({ embedded = false }: { embedded?: boolean }) {
             <button type="button" className="button button-secondary button-md" onClick={() => setMembersOpen(false)}>Close</button>
           </section>
         </div>
+      )}
+
+      {reportTarget && (
+        <ReportDialog
+          targetType="profile"
+          targetId={reportTarget.id}
+          targetLabel={reportTarget.name}
+          onBlock={async () => {
+            await blockProfile(reportTarget.id)
+          }}
+          onClose={() => setReportTarget(null)}
+        />
       )}
 
       {confirm?.kind === "remove" && thread.activityId && (
