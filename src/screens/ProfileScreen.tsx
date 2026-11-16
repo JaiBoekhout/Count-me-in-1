@@ -1,3 +1,4 @@
+import { useProfileExtras } from "../lib/profileExtras"
 import { SupporterBadge } from "../components/SupporterBadge"
 import {
   ArrowLeft,
@@ -266,6 +267,7 @@ export function ProfileScreen() {
             stats: { meetups: 4, hosted: 1, sports: 2 },
           })
   const profileId = isCurrentUser ? savedProfile?.id : remoteProfile?.id
+  const profileExtras = useProfileExtras(profileId)
   const [realFriends, setRealFriends] = useState<CommunityMember[] | null>(null)
   useEffect(() => {
     if (!profileId) {
@@ -561,7 +563,10 @@ export function ProfileScreen() {
         </div>
       </header>
 
-      <div className="profile-identity">
+      {profileExtras?.coverUrl && (
+        <div className="profile-cover"><img src={profileExtras.coverUrl} alt="" /></div>
+      )}
+      <div className={`profile-identity ${profileExtras?.coverUrl ? 'has-cover' : ''}`}>
         <div className="relative">
           {isCurrentUser ? (
             <button
@@ -603,6 +608,11 @@ export function ProfileScreen() {
           {profile.name}, {profile.age}
         </h1>
         <SupporterBadge profileId={profileId} isOwnProfile={isCurrentUser} />
+        {profileExtras && profileExtras.favouriteSpots.length > 0 && (
+          <div className="spot-chips centered" aria-label="Favourite spots">
+            {profileExtras.favouriteSpots.map((spot) => <span className="spot-chip" key={spot}>{spot}</span>)}
+          </div>
+        )}
         <p>
           <MapPin />
           {profile.suburb}

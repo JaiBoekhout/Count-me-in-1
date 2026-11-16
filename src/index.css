@@ -6102,3 +6102,61 @@ textarea:focus::placeholder { color: transparent; }
 .year-page .button-lg { display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
 .alert-select { width: 100%; min-height: 48px; padding: 0 12px; border: 1px solid var(--border); border-radius: var(--radius-lg); background: var(--surface-1); color: var(--text-primary); font-size: 16px; }
 .alert-toggle { border: 1px solid var(--border); border-radius: var(--radius-lg); background: var(--surface-1); }
+
+/* Pro: cover photo and favourite spots. */
+.profile-cover { overflow: hidden; height: 150px; margin: 0 -20px; border-bottom: 1px solid var(--border); }
+.profile-cover img { width: 100%; height: 100%; object-fit: cover; }
+.profile-identity.has-cover { margin-top: -52px; position: relative; }
+.cover-preview { display: grid; place-items: center; overflow: hidden; aspect-ratio: 16 / 6; border: 1px dashed var(--border-strong); border-radius: var(--radius-lg); background: var(--surface-1); color: var(--text-muted); }
+.cover-preview img { width: 100%; height: 100%; object-fit: cover; }
+.spot-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.spot-chips.centered { justify-content: center; margin: 4px 0 8px; }
+.spot-chip { display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 999px; background: var(--seafoam-subtle); color: var(--seafoam); font-size: 14px; }
+.spot-chip button { display: grid; place-items: center; border: 0; background: transparent; color: inherit; padding: 0; }
+.spot-chip svg { width: 14px; height: 14px; }
+.spot-add { display: grid; grid-template-columns: 1fr auto; gap: 8px; }
+.spot-add input { min-height: 44px; padding: 0 12px; border: 1px solid var(--border); border-radius: var(--radius-lg); background: var(--surface-1); color: var(--text-primary); font-size: 16px; }
+.more-settings-page .button-md svg { width: 16px; height: 16px; }
+.more-settings-page .button-md { display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
+
+/* Stories. */
+.story-composer, .story-list { display: grid; gap: 14px; }
+.story-composer textarea { width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: var(--radius-lg); background: var(--surface-1); color: var(--text-primary); font: inherit; font-size: 16px; resize: vertical; }
+.story-card { overflow: hidden; border: 1px solid var(--border); border-radius: var(--radius-xl); background: var(--surface-1); }
+.story-card.is-hidden { opacity: 0.6; }
+.story-photo { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; border-radius: var(--radius-lg); }
+.story-card .story-photo { border-radius: 0; }
+.story-body { display: grid; gap: 8px; padding: 14px 16px 16px; }
+.story-body h2 { font-size: 24px; }
+.story-body p { color: var(--text-secondary); line-height: 1.5; white-space: pre-line; }
+.story-author { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; border: 0; background: transparent; color: var(--text-primary); padding: 0; text-align: left; }
+.story-author small { color: var(--text-muted); }
+.story-sport { display: inline-flex; align-items: center; gap: 4px; color: var(--seafoam); font-size: 13px; }
+.story-sport svg { width: 14px; height: 14px; }
+.story-actions { display: flex; flex-wrap: wrap; gap: 14px; }
+.story-actions button { display: inline-flex; align-items: center; gap: 4px; border: 0; background: transparent; color: var(--seafoam); font-size: 14px; padding: 4px 0; }
+.story-actions svg { width: 14px; height: 14px; }
+.story-hidden-note { color: var(--danger); font-size: 13px; }
+
+/* Dropdowns: keep the arrow away from the rounded edge. */
+/* :not(#none) makes this win over the background shorthand on each select. */
+select:not(#none) {
+  appearance: none;
+  -webkit-appearance: none;
+  padding-right: 44px;
+  /* Chevron drawn with two gradients, in the app's own colour. */
+  background-image:
+    linear-gradient(45deg, transparent 40%, var(--text-secondary) 40%, var(--text-secondary) 60%, transparent 60%),
+    linear-gradient(-45deg, transparent 40%, var(--text-secondary) 40%, var(--text-secondary) 60%, transparent 60%);
+  background-position:
+    calc(100% - 25px) 50%,
+    calc(100% - 18px) 50%;
+  background-size: 8px 8px, 8px 8px;
+  background-repeat: no-repeat;
+}
+select:focus { outline-color: var(--seafoam); }
+
+/* Privacy and safety: Delete account. */
+.delete-account { display: grid; gap: 12px; margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--border); }
+.delete-account-confirm { display: grid; gap: 12px; padding: 16px; border: 1px solid var(--danger); border-radius: var(--radius-lg); background: var(--danger-subtle); }
+.delete-account-confirm p { color: var(--text-primary); line-height: 1.45; }

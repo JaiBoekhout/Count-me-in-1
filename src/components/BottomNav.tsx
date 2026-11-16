@@ -4,7 +4,8 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { currentUser } from '../data/mockData'
 import { getCurrentModerationRole } from '../lib/moderation'
 import { getMoreOrigin, requestCloseMoreMenu } from '../lib/moreNavigation'
-import { getModerationGroup, logOut, sideNavGroups, sideNavMainItems, type MenuItem } from '../lib/moreMenu'
+import { getModerationGroup, logOut, proGroup, sideNavGroups, sideNavMainItems, type MenuItem } from '../lib/moreMenu'
+import { usePremium } from '../lib/premium'
 import { useMediaQuery } from '../lib/useMediaQuery'
 import { useViewerProfile } from '../lib/viewerProfile'
 
@@ -47,7 +48,9 @@ export function BottomNav({
   const isSideNav = useMediaQuery('(min-width: 980px)')
   const [isStaff, setIsStaff] = useState(false)
   const [isAdmin, setIsAdmin] = useState(false)
-  const groups = isStaff ? [...sideNavGroups, getModerationGroup(isAdmin)] : sideNavGroups
+  const premium = usePremium()
+  // Pro: for now only the team (admins and moderators) has it.
+  const groups = [...sideNavGroups, ...(premium ? [proGroup] : []), ...(isStaff ? [getModerationGroup(isAdmin)] : [])]
   // Side nav groups: the one holding the current page starts open.
   const [openGroups, setOpenGroups] = useState<string[]>(() =>
     groups.filter((group) => group.items.some((item) => item.href === location.pathname)).map((group) => group.title),

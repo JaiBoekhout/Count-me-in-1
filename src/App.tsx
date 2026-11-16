@@ -1,3 +1,5 @@
+import { StoriesScreen } from "./screens/StoriesScreen"
+import { ProfileStyleScreen } from "./screens/ProfileStyleScreen"
 import { SmartAlertsScreen } from "./screens/SmartAlertsScreen"
 import { YearInReviewScreen } from "./screens/YearInReviewScreen"
 import { PartnersAdminScreen } from "./screens/PartnersAdminScreen"
@@ -287,6 +289,8 @@ const router = createBrowserRouter([
       { path: "/more/explore-sports", element: <ExploreSportsScreen /> },
       { path: "/profile/year", element: <YearInReviewScreen /> },
       { path: "/more/alerts", element: <SmartAlertsScreen /> },
+      { path: "/profile/style", element: <ProfileStyleScreen /> },
+      { path: "/stories", element: <StoriesScreen /> },
       { path: "/more/moderation/members/:id/edit", element: <AdminEditProfileScreen /> },
       { path: "/more/moderation/members/:id/message", element: <SendStaffMessageScreen /> },
     ],
