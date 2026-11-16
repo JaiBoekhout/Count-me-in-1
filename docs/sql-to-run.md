@@ -75,3 +75,5 @@ Alle bestanden zijn veilig om opnieuw te draaien. Weet je niet zeker of je er ee
 - **Na 29:** je krijgt onderaan **Success**. Geeft hij een fout over `pg_cron`? Ga dan naar **Database** > **Extensions**, zoek **pg_cron**, zet hem aan en draai 29 opnieuw.
 - **Na 30:** ga als admin naar **More** > **Moderation** > **Sports**, voeg **Fishing** toe en wijzig daarna het icoon. Je krijgt geen foutmelding.
 - **Na 31:** open **Invite a mate**. Bovenaan staat "Invite 4 mates, get a year of Pro free" met 0 of 4.
+- **Na 32:** je krijgt onderaan **Success**. Op je eigen profiel staat de Supporter-badge (zichtbaar voor het team zolang Pro alleen voor het team is).
+- **Na 33:** ga als admin naar **More** > **Smart alerts**, maak een alert aan en sla op. Je krijgt geen foutmelding.
